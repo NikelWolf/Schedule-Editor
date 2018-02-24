@@ -17,7 +17,7 @@ clean: # remove libs and headers files
 # Target that are usefull for other targets
 # don't edit!
 
-.PHONY: _download_libs_src _deps_dir _expat _zlib _libzip _openssl _bzip2 _xlsxio
+.PHONY: _install_dependencies _download_libs_src _deps_dir _expat _zlib _libzip _openssl _bzip2 _xlsxio
 
 _install_dependencies:
 	mkdir $(TMP_DIR)
