@@ -10,7 +10,7 @@
             "/usr/local/include",
             "/usr/lib/gcc/x86_64-pc-linux-gnu/7.3.0/include-fixed",
             "/usr/include",
-            "${workspaceRoot}/build/include",
+            "${workspaceRoot}/build/include/",
             "${workspaceRoot}"
         ],
         "defines": [],
@@ -24,7 +24,7 @@
                 "/usr/local/include",
                 "/usr/lib/gcc/x86_64-pc-linux-gnu/7.3.0/include-fixed",
                 "/usr/include",
-                "${workspaceRoot}/build/include",
+                "${workspaceRoot}/build/include/",
                 "${workspaceRoot}"
             ],
             "limitSymbolsToIncludedHeaders": true,
