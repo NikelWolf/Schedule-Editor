@@ -29,9 +29,9 @@ def open_schedule_file(file_name: str) -> xlrd.Book:
     return xlrd.open_workbook(file_name)
 
 
-def get_cell_indecies(schedule_sheet: xlrd.sheet.Sheet) -> tuple:
-    """by each call return tuple of indecies in sheet in format: (row, column)\n
-       example: for row, col in get_cell_indecies(sheet): print(f"row={row}\ncol={col}")
+def get_cell_indices(schedule_sheet: xlrd.sheet.Sheet) -> tuple:
+    """by each call return tuple of indices in sheet in format: (row, column)\n
+       example: for row, col in get_cell_indices(sheet): print(f"row={row}\ncol={col}")
     """
 
     for row in range(schedule_sheet.nrows):
@@ -39,10 +39,10 @@ def get_cell_indecies(schedule_sheet: xlrd.sheet.Sheet) -> tuple:
             yield (row, col)
 
 
-def get_all_groups(schedule_sheet: xlrd.sheet.Sheet, add_group_start_indecies: bool=None) -> list:
+def get_all_groups(schedule_sheet: xlrd.sheet.Sheet, add_group_start_indices: bool=False) -> list:
     """return list of groups that are in schedule file\n
        group name must be in following format: (4 letters)-(2 digits)-(2 digits)\n
-       if add_group_indecies is set to True function will return tuple in following format:
+       if add_group_indices is set to True function will return tuple in following format:
        (group name, (row where info starts, column where info starts)) else only tuple with group name in it
        example: first_group = get_all_groups(sheet, True)[0]
     """
@@ -50,10 +50,10 @@ def get_all_groups(schedule_sheet: xlrd.sheet.Sheet, add_group_start_indecies: b
     groups = []
     reg = r"[A-zА-яЁё]{4}-\d{2}-\d{2}"
 
-    for row, col in get_cell_indecies(schedule_sheet):
+    for row, col in get_cell_indices(schedule_sheet):
         reg_result = re.match(reg, str(schedule_sheet.cell(row, col).value))
         if reg_result:
-            groups.append((reg_result.group(0), (row, col)) if add_group_start_indecies else reg_result.group(0))
+            groups.append((reg_result.group(0), (row, col)) if add_group_start_indices else reg_result.group(0))
 
     return groups
 
@@ -78,13 +78,13 @@ def add_addition_message(message: str, group_schedule: map, day_number: int) -> 
             group_schedule[parity][day_number][pair_number]["additions"].append(message)
 
 
-def check_for_free_day(schedule_sheet: xlrd.sheet.Sheet, group_schedule: map, indecies_to_test: tuple) -> bool:
+def check_for_free_day(schedule_sheet: xlrd.sheet.Sheet, group_schedule: map, indices_to_test: tuple) -> bool:
     """check if day in schedule file marked as free from lessons"""
 
-    if schedule_sheet.cell(*indecies_to_test).value != u"День":
+    if schedule_sheet.cell(*indices_to_test).value != u"День":
         return False
 
-    test_cells = schedule_sheet.col_slice(indecies_to_test[1], indecies_to_test[0], indecies_to_test[0] + 5)
+    test_cells = schedule_sheet.col_slice(indices_to_test[1], indices_to_test[0], indices_to_test[0] + 5)
     free_day_elements = [cell_value.value for cell_value in test_cells if cell_value.value]
 
     perhaps_free_day_string = f"{free_day_elements[0]} {free_day_elements[1]} {free_day_elements[2]}"
@@ -92,19 +92,19 @@ def check_for_free_day(schedule_sheet: xlrd.sheet.Sheet, group_schedule: map, in
     return perhaps_free_day_string.lower() == u"День самостоятельных занятий".lower()
 
 
-def fill_pair(schedule_sheet: xlrd.sheet.Sheet, pair_part_of_schedule: map, indecies: tuple) -> None:
+def fill_pair(schedule_sheet: xlrd.sheet.Sheet, pair_part_of_schedule: map, indices: tuple) -> None:
     """fill info about pair"""
 
     info_filler = lambda cell: "|".join(cell.value.strip().split("\n"))
 
     pair_types = ["subject", "type", "professor", "room"]
-    cells = schedule_sheet.row_slice(indecies[0], indecies[1], indecies[1] + 4)
+    cells = schedule_sheet.row_slice(indices[0], indices[1], indices[1] + 4)
 
     for i, pair_type in enumerate(pair_types):
         pair_part_of_schedule[pair_type] = info_filler(cells[i])
 
 
-def get_shedule_for_group(schedule_sheet: xlrd.sheet.Sheet, group: tuple, print_schedule: bool=False, file_to_print=sys.stdout) -> map:
+def get_schedule_for_group(schedule_sheet: xlrd.sheet.Sheet, group: tuple, print_schedule: bool=False, file_to_print=sys.stdout) -> map:
     """return schedule for group"""
 
     group_schedule = create_map_group_schedule_template()
@@ -157,7 +157,7 @@ def main(args: list=sys.argv[1:]):
             groups = get_all_groups(schedule_sheet, True)
             for group in groups:
                 with open(f"schedule_for_{group[0]}.json", "w") as group_file:
-                    get_shedule_for_group(schedule_sheet, group, True, group_file)
+                    get_schedule_for_group(schedule_sheet, group, True, group_file)
 
             os.chdir("..")
     else:
