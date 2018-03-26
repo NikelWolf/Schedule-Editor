@@ -59,7 +59,7 @@ def get_all_groups(schedule_sheet: xlrd.sheet.Sheet, add_group_start_indices: bo
 
 
 def find_group(schedule_sheet: xlrd.sheet.Sheet, group_name) -> tuple:
-    """find group in sheet and return tuple in following format:\n
+    """find group in sheet and return tuple in following format:
        (group name, (row where info starts, column where info starts))
     """
 

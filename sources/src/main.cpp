@@ -1,6 +1,8 @@
 #include <iostream>
+
 #include <xlnt/xlnt.hpp>
-#include <schedule_parser.h>
+
+#include <schedule_parser.hpp>
 
 using namespace std;
 using namespace xlnt;
@@ -11,10 +13,15 @@ int main(int argc, char *argv[]) {
         cerr << "usage: mirea_schedule schedule.xlsx" << endl;
         return 0;
     }
+
     auto wb = open_schedule_file(argv[1]);
-    for (auto group: get_all_groups(wb.active_sheet())) {
+    auto ws = wb.active_sheet();
+    for (auto group: get_all_groups(ws)) {
         cout << group.first << " => (" << group.second.first << ", " << group.second.second << ")\n";
     }
+
+    auto group = find_group(ws, "ИКБО-13-17");
+    cout << group.first << " " << group.second.first << ", " << group.second.second << endl;
 
     return 0;
 }

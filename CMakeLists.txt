@@ -16,15 +16,28 @@ set(RESOURCES_DIR ${CMAKE_SOURCE_DIR}/sources/resources)
 set(XLNT_INSTALL_LOCATION ${CMAKE_BINARY_DIR})
 ExternalProject_Add(xlntlib
     GIT_REPOSITORY https://github.com/tfussell/xlnt
-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${XLNT_INSTALL_LOCATION} -DSTATIC=ON -DTESTS=OFF -DSAMPLES=OFF -DBENCHMARKS=OFF -DPYTHON=OFF
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${XLNT_INSTALL_LOCATION} -DTESTS=OFF -DSAMPLES=OFF -DBENCHMARKS=OFF -DPYTHON=OFF
 )
 include_directories(${XLNT_INSTALL_LOCATION}/include)
 link_directories(${XLNT_INSTALL_LOCATION}/lib)
 
 
-add_executable(${PROJECT_NAME} ${SOURCES_DIR}/main.cpp ${INCLUDE_DIR}/schedule_parser.h ${SOURCES_DIR}/schedule_parser.cpp)
+set(SOURCES ${SOURCES_DIR}/main.cpp
+        ${SOURCES_DIR}/schedule_parser.cpp
+)
+
+set(HEADERS ${INCLUDE_DIR}/schedule_parser.hpp)
+
+add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
 target_include_directories(${PROJECT_NAME} PUBLIC ${INCLUDE_DIR})
 add_dependencies(${PROJECT_NAME} xlntlib)
 target_link_libraries(${PROJECT_NAME} xlnt)
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${RESOURCES_DIR} ${CMAKE_BINARY_DIR}/resources)
+
+if (WIN32)
+    set(dll_file ${CMAKE_BINARY_DIR}/third-party/XLNT/source/libxlntd.dll)
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy
+            ${dll_file} ${CMAKE_BINARY_DIR})
+endif()
