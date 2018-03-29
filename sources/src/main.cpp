@@ -2,7 +2,8 @@
 
 #include <xlnt/xlnt.hpp>
 
-#include <schedule_parser.hpp>
+#include <schedule_parser.h>
+#include <xlsx_file.h>
 
 using namespace std;
 using namespace xlnt;
@@ -14,14 +15,12 @@ int main(int argc, char *argv[]) {
         return 0;
     }
 
-    auto wb = open_schedule_file(argv[1]);
-    auto ws = wb.active_sheet();
-    for (auto group: get_all_groups(ws)) {
-        cout << group.first << " => (" << group.second.first << ", " << group.second.second << ")\n";
+    XlsxFile xlsxFile{argv[1]};
+    for (int i = xlsxFile.get_start_row(); i <= xlsxFile.get_end_row(); i++) {
+        for (int j = xlsxFile.get_start_column(); i <= xlsxFile.get_end_column(); j++) {
+            cout << i << "|" << j << "|" << xlsxFile(i, j) << endl;
+        }
     }
-
-    auto group = find_group(ws, "ИКБО-13-17");
-    cout << group.first << " " << group.second.first << ", " << group.second.second << endl;
 
     return 0;
 }
