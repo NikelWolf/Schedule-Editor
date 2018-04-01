@@ -1,87 +1,129 @@
 #pragma once
 
-#include <iostream>
-#include <unordered_map>
-
-#include <xlnt/xlnt.hpp>
-
-#include "common.h"
-
-using namespace std;
-using namespace xlnt;
+#include <common.h>
 
 namespace schedule_api {
     class XlsxFile {
     public:
+        class XlsxCell {
+        public:
+            XlsxCell() = default;
+
+            explicit XlsxCell(string value): value{std::move(value)} {}
+
+            virtual ~XlsxCell() = default;
+
+            string value{};
+            bool __was_changed = false;
+        };
+
+
         explicit XlsxFile(const string &file_name) {
-            _wb.load(file_name);
+            _file_name = file_name;
+
+            try {
+                _wb.load(_file_name);
+            } catch (xlnt::exception&) {
+                throw ScheduleError{"file '" + file_name + "' does not exist"};
+            }
+
             _ws = _wb.active_sheet();
-            _fill_cells_constraints();
-            _fill_xlsx_info();
+            _load_xlsx_into_info();
         }
 
-        void write() {
-            for (int row = _start_row; row <= _end_row; row++) {
-                for (int column = _start_column; column <= _end_column; column++) {
-                    _ws.cell(column, row).value(_xlsx_info[{row, column}]);
-                }
+        virtual ~XlsxFile() {
+            if (_file_was_changed) {
+                write();
             }
         }
 
-        const string &operator()(int i, int j) const {
-            return _xlsx_info[{i, j}];
+        unsigned long get_max_row_index() const {
+            return _max_row;
         }
 
-        void operator()(int i, int j, const string& value) {
-            _xlsx_info[{i, j}] = value;
+        unsigned long get_max_column_index() const {
+            return _max_column;
         }
 
-        int get_start_row() const {
-            return _start_row;
+        const vector<vector<XlsxCell>> &get_rows() const {
+            return _xlsx_info;
         }
 
-        int get_start_column() const {
-            return _start_column;
+        const vector<XlsxCell> &get_row(unsigned long index) const {
+            _check_indices(index, 0);
+
+
+            return _xlsx_info[index];
         }
 
-        int get_end_row() const {
-            return _end_row;
+        const string &get_cell(unsigned long row, unsigned long column) const {
+            _check_indices(row, column);
+
+            return _xlsx_info[row][column].value;
         }
 
-        int get_end_column() const {
-            return _end_column;
+        void set_cell(unsigned long row, unsigned long column, const string& value) {
+            _check_indices(row, column);
+
+            _file_was_changed = true;
+
+            _xlsx_info[row][column].value = value;
+            _xlsx_info[row][column].__was_changed = true;
         }
 
-        pair<int, int> get_start_indecies() const {
-            return {_start_row, _start_column};
+        const string &get_file_name() const {
+            return _file_name;
         }
 
-        pair<int, int> get_end_indecies() const {
-            return {_end_row, _end_column};
+        void write() {
+            for (unsigned long row = 1; row < _max_row + 1; row++) {
+                for (unsigned long column = 1; column < _max_column + 1; column++) {
+                    if (_xlsx_info[row - 1][column - 1].__was_changed) {
+                        _ws.cell(column, static_cast<row_t>(row)).value(_xlsx_info[row - 1][column - 1].value);
+                    }
+                }
+            }
+
+            _wb.save(_file_name);
+
+            _file_was_changed = false;
         }
 
 
     private:
-        int _start_row{}, _end_row{};
-        int _start_column{}, _end_column{};
+        bool _file_was_changed = false;
 
-        workbook _wb{};
+        string _file_name;
+        workbook _wb;
         worksheet _ws;
-        unordered_map<pair<int, int>, string> _xlsx_info{};
 
-        void _fill_xlsx_info() {
-            for (cell_vector cv: _ws.columns(false)) {
-                for (cell c: cv) {
-                    _xlsx_info.emplace({{c.row(), c.column().index}, c.to_string()});
+        vector<vector<XlsxCell>> _xlsx_info{};
+
+        unsigned long _max_row{}, _max_column{};
+
+        void _load_xlsx_into_info() {
+            _max_row = _ws.highest_row();
+            _max_column = _ws.highest_column().index;
+
+            for (unsigned long row = 1; row <= _max_row; row++) {
+                vector<XlsxCell> row_info;
+                for (unsigned long column = 1; column <= _max_column; column++) {
+                    try {
+                        row_info.emplace_back(XlsxCell{_ws.cell(column, static_cast<row_t>(row)).to_string()});
+                    } catch (out_of_range&) {
+                        row_info.emplace_back(XlsxCell{});
+                    }
                 }
+                _xlsx_info.push_back(row_info);
             }
         }
 
-        void _fill_cells_constraints() {
-            _start_row = _ws.lowest_row();
-            _end_row = _ws.highest_row();
-            _start_column = _ws.lowest_column().index;
-            _end_column = _ws.highest_column().index;
+        void _check_indices(unsigned long row, unsigned long column) const {
+            if (row >= _max_row || row < 0)
+                throw ScheduleError{"row " + to_string(row) + " is not accessible"};
+
+            if (column >= _max_column || column < 0)
+                throw ScheduleError{"column " + to_string(column) + " is not accessible"};
         }
     };
 }

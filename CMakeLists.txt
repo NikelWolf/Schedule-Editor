@@ -21,12 +21,8 @@ ExternalProject_Add(xlntlib
 include_directories(${XLNT_INSTALL_LOCATION}/include)
 link_directories(${XLNT_INSTALL_LOCATION}/lib)
 
-
-set(SOURCES ${SOURCES_DIR}/main.cpp
-        ${SOURCES_DIR}/schedule_parser.cpp
-)
-
-set(HEADERS ${INCLUDE_DIR}/schedule_parser.h ${INCLUDE_DIR}/lesson.h sources/include/schedule_error.h sources/include/common.h sources/include/group_schedule.h sources/include/xlsx_file.h)
+file(GLOB SOURCES ${SOURCES_DIR}/*.cpp)
+file(GLOB HEADERS ${INCLUDE_DIR}/*.h)
 
 add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
 target_include_directories(${PROJECT_NAME} PUBLIC ${INCLUDE_DIR})

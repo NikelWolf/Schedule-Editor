@@ -134,7 +134,6 @@ def get_schedule_for_group(schedule_sheet: xlrd.sheet.Sheet, group: tuple, print
 
                 row_number += 1
 
-
     if print_schedule:
         print(json.dumps(group_schedule, indent=4, ensure_ascii=False), file=file_to_print)
 

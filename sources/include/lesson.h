@@ -1,9 +1,6 @@
 #pragma once
 
-#include <iostream>
-#include <string>
-#include <vector>
-#include <vector>
+#include <common.h>
 
 using namespace std;
 
@@ -16,23 +13,27 @@ namespace schedule_api {
                 _subject_name{move(subject_name)}, _lesson_type{move(lesson_type)},
                 _professor{move(professor)}, _room{move(room)}, _additions{} {}
 
-        Lesson(Lesson &&lesson) noexcept {
-            _subject_name = lesson._subject_name;
-            _lesson_type = lesson._lesson_type;
-            _professor = lesson._professor;
-            _room = lesson._room;
-            _additions = move(lesson._additions);
-        }
-
-        Lesson &operator=(Lesson &&lesson) noexcept {
+        Lesson(const Lesson &lesson) noexcept {
             _subject_name = lesson._subject_name;
             _lesson_type = lesson._lesson_type;
             _professor = lesson._professor;
             _room = lesson._room;
             _additions = lesson._additions;
-
-            return *this;
         }
+
+        Lesson(Lesson &&lesson) noexcept {
+            _subject_name = lesson._subject_name;
+            _lesson_type = lesson._lesson_type;
+            _professor = lesson._professor;
+            _room = lesson._room;
+            _additions = lesson._additions;
+        }
+
+        virtual ~Lesson() = default;
+
+        Lesson &operator=(const Lesson &lesson) = default;
+
+        Lesson &operator=(Lesson &&lesson) = default;
 
         const string &get_subject_name() const {
             return _subject_name;
@@ -58,24 +59,48 @@ namespace schedule_api {
             _professor = professor;
         }
 
+        const string &get_room() const {
+            return _room;
+        }
+
+        void set_room(const string &room) {
+            _room = room;
+        }
+
+        void set_additions(const vector<string> &additions) {
+            _additions = additions;
+        }
+
         void add_addition(const string &addition) {
             _additions.push_back(const_cast<string &>(addition));
+        }
+
+        void add_additions(const vector<string> &additions) {
+            for (const string &addition: additions) {
+                _additions.push_back(addition);
+            }
         }
 
         const vector<string> &get_additions() const {
             return _additions;
         }
 
-        friend ostream &operator<<(ostream &os, const Lesson &lesson) {
-            os << "Lesson: {\n\tsubject: \"" << lesson._subject_name << "\",\n\ttype: \"" << lesson._lesson_type
-               << "\",\n\tprofessor: \"" << lesson._professor << "\",\n\troom: \"" << lesson._room << "\",\n\tadditions: [";
-            string addition_repr;
-            for (int i = 0; i < lesson._additions.size(); i++) {
-                addition_repr += "\n\t\t\"" + lesson._additions[i] + (i != lesson._additions.size() - 1 ? "\"," : "\"");
+        string to_string(const string &intends="\n\t") const {
+
+            string str_lesson = "Lesson: {" + intends +
+                                          "\tsubject: \"" + _subject_name + "\"," + intends +
+                                          "\ttype: \"" + _lesson_type + "\"," + intends +
+                                          "\tprofessor: \"" + _professor + "\"," + intends +
+                                          "\troom: \"" + _room + "\"," + intends +
+                                          "\tadditions: [";
+            for (int i = 0; i < _additions.size(); i++) {
+                str_lesson += intends + "\t\t\"" + _additions[i] + (i != _additions.size() - 1 ? "\"," : "\"");
             }
-            os << addition_repr << "\n\t]\n}";
-            return os;
+            str_lesson += intends + "\t]" + intends + "}";
+            return str_lesson;
         }
+
+        friend ostream &operator<<(ostream &os, const Lesson &lesson);
 
     private:
         string _subject_name;
@@ -84,4 +109,9 @@ namespace schedule_api {
         string _room;
         vector<string> _additions;
     };
+
+    ostream &operator<<(ostream &os, const Lesson &lesson) {
+        os << lesson.to_string();
+        return os;
+    }
 }
