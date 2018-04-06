@@ -7,40 +7,31 @@
 namespace scheduler {
     class Scheduler {
     public:
-        explicit Scheduler(const string &file_name): _schedule{file_name} {
+        explicit Scheduler(const string &file_name);
 
-        }
+        bool is_group_in_schedule(const string &group_name) const;
 
-        bool is_group_in_schedule(const string &group_name) {
-            if (!GroupSchedule::is_group_name_valid(group_name)) {
-                return false;
-            }
+        const GroupSchedule &get_group(const string &group_name) const;
 
-            for (GroupSchedule &gs: _groups) {
-                if (gs.get_group_name() == group_name) {
-                    return true;
-                }
-            }
+        // TODO: implement adding group into schedule
+        void add_group(const GroupSchedule &gs);
 
-            return false;
-        }
-
-        const GroupSchedule &get_group(const string &group_name) {
-            if (!GroupSchedule::is_group_name_valid(group_name)) {
-                throw ScheduleError{"group name '" + group_name + "' is invalid"};
-            }
-
-            for (GroupSchedule &gs: _groups) {
-                if (gs.get_group_name() == group_name) {
-                    return gs;
-                }
-            }
-
-            throw ScheduleError{"group '" + group_name + "' is not in schedule"};
-        }
+        friend ostream &operator<<(ostream &os, const Scheduler &scheduler);
 
     private:
         XlsxFile _schedule;
         vector<GroupSchedule> _groups{};
+
+        cell_index_t _get_group_name_row() const;
+
+        bool _check_for_free_day(GroupSchedule &gs, pair<cell_index_t, cell_index_t> start_position) const;
+
+        string _filter_cell_info(const string &cell_value) const;
+
+        Lesson _fill_lesson(GroupSchedule &gs, pair<cell_index_t, cell_index_t> start_position) const;
+
+        void _get_schedule_for_group(GroupSchedule &gs, pair<cell_index_t, cell_index_t> start_position);
+
+        void _parse_schedule();
     };
 }

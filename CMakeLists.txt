@@ -23,10 +23,12 @@ link_directories(${XLNT_INSTALL_LOCATION}/lib)
 
 
 set(SOURCES ${SOURCES_DIR}/main.cpp
+            ${SOURCES_DIR}/common.cpp
             ${SOURCES_DIR}/schedule_error.cpp
             ${SOURCES_DIR}/lesson.cpp
             ${SOURCES_DIR}/xlsx_file.cpp
-            ${SOURCES_DIR}/group_schedule.cpp )
+            ${SOURCES_DIR}/group_schedule.cpp
+            ${SOURCES_DIR}/scheduler.cpp )
 
 
 set(HEADERS ${INCLUDE_DIR}/common.h

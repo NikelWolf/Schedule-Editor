@@ -1,5 +1,6 @@
 #include <iostream>
 #include <ctime>
+#include <fstream>
 
 #include <scheduler.h>
 
@@ -13,12 +14,9 @@ int main(int argc, char *argv[]) {
         return 0;
     }
 
-    XlsxFile file{argv[1]};
-    cout << file.get_cell(1, 1);
-    file.set_cell(1, 1, "tmp");
-    cout << file.get_cell(1, 1);
-    file.save();
-
+    Scheduler scheduler{argv[1]};
+    ofstream f{"tmp.txt"};
+    f << scheduler << endl;
 
     return 0;
 
