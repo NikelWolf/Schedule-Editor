@@ -13,6 +13,8 @@ namespace scheduler {
 
         const GroupSchedule &get_group(const string &group_name) const;
 
+        const vector<GroupSchedule> &get_groups() const;
+
         // TODO: implement adding group into schedule
         void add_group(const GroupSchedule &gs);
 
