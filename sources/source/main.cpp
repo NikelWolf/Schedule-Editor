@@ -2,6 +2,11 @@
 #include <ctime>
 #include <fstream>
 
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QWidget>
+#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QLabel>
+
 #include <scheduler.h>
 
 using namespace std;
@@ -17,6 +22,20 @@ int main(int argc, char *argv[]) {
     Scheduler scheduler{argv[1]};
     cout << scheduler.get_groups().size() << endl;
 
-    return 0;
 
+    QApplication app(argc, argv);
+
+    QWidget widget;
+    widget.resize(640, 480);
+    widget.setWindowTitle("Hello, world!!!");
+
+    QGridLayout *gridLayout = new QGridLayout(&widget);
+
+    QLabel * label = new QLabel("Hello, world!!!");
+    label->setAlignment(Qt::AlignVCenter | Qt::AlignHCenter);
+    gridLayout->addWidget(label);
+
+    widget.show();
+
+    return app.exec();
 }
