@@ -11,7 +11,10 @@ def main(folder_name: str):
 
     with zipfile.ZipFile(os.path.basename(folder_name) + ".xlsx", "w") as z:
         for file in files:
-            z.write(file)
+            try:
+                z.write(file)
+            except FileNotFoundError:
+                print(f"{file} was not found")
 
     os.rename(os.path.basename(folder_name) + ".xlsx", os.curdir + "/../" + os.path.basename(folder_name) + ".xlsx")
 
