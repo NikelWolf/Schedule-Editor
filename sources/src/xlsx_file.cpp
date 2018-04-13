@@ -32,20 +32,20 @@ namespace scheduler {
         return _xlsx_info;
     }
 
-    const vector<XlsxFile::XlsxCell> &XlsxFile::get_row(cell_index_t index) const {
+    const vector<XlsxFile::XlsxCell> &XlsxFile::get_row(schedule_index_t index) const {
         _check_indices(index, 0);
 
 
         return _xlsx_info[index];
     }
 
-    const string &XlsxFile::get_cell(cell_index_t row, cell_index_t column) const {
+    const string &XlsxFile::get_cell(schedule_index_t row, schedule_index_t column) const {
         _check_indices(row, column);
 
         return _xlsx_info[row][column].value;
     }
 
-    void XlsxFile::set_cell(cell_index_t row, cell_index_t column, const string& value) {
+    void XlsxFile::set_cell(schedule_index_t row, schedule_index_t column, const string& value) {
         _check_indices(row, column);
 
         _file_was_changed = true;
@@ -60,8 +60,8 @@ namespace scheduler {
     }
 
     void XlsxFile::write() {
-        for (cell_index_t row = 1; row < _max_row + 1; row++) {
-            for (cell_index_t column = 1; column < _max_column + 1; column++) {
+        for (schedule_index_t row = 1; row < _max_row + 1; row++) {
+            for (schedule_index_t column = 1; column < _max_column + 1; column++) {
                 if (_xlsx_info[row - 1][column - 1].__was_changed) {
                     _ws.cell(column, static_cast<row_t>(row)).value(_xlsx_info[row - 1][column - 1].value);
                 }
@@ -82,9 +82,9 @@ namespace scheduler {
         _max_row = _ws.highest_row();
         _max_column = _ws.highest_column().index;
 
-        for (cell_index_t row = 1; row <= _max_row; row++) {
+        for (schedule_index_t row = 1; row <= _max_row; row++) {
             vector<XlsxCell> row_info;
-            for (cell_index_t column = 1; column <= _max_column; column++) {
+            for (schedule_index_t column = 1; column <= _max_column; column++) {
                 try {
                     row_info.emplace_back(XlsxCell{_ws.cell(column, static_cast<row_t>(row)).to_string()});
                 } catch (out_of_range&) {
@@ -95,7 +95,7 @@ namespace scheduler {
         }
     }
 
-    void XlsxFile::_check_indices(cell_index_t row, cell_index_t column) const {
+    void XlsxFile::_check_indices(schedule_index_t row, schedule_index_t column) const {
         if (row >= _max_row || row < 0)
             throw ScheduleError{"row " + to_string(row) + " is not accessible"};
 

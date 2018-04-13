@@ -17,6 +17,13 @@ namespace scheduler {
 
         void set_group_name(const string& group_name);
 
+        const string &get_group_faculty() const;
+
+        void set_group_faculty(const string& group_faculty);
+
+        const string &get_group_magic_number() const;
+
+        void set_group_magic_number(const string &group_magic_number);
         const Lesson &get_lesson(int parity, int day, int lesson_number) const;
 
         void set_lesson(int parity, int day, int lesson_number, const Lesson &lesson);
@@ -30,6 +37,8 @@ namespace scheduler {
     private:
         const static regex _group_name_template;
         string _group_name;
+        string _group_faculty;
+        string _group_magic_number; // I don't know what this number means
         parity_week_template _group_schedule;
 
         void _create_group_schedule_template();

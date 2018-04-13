@@ -27,6 +27,22 @@ namespace scheduler {
             _group_name = group_name;
         }
 
+        const string &GroupSchedule::get_group_faculty() const {
+            return _group_faculty;
+        }
+
+        void GroupSchedule::set_group_faculty(const string& group_faculty) {
+            _group_faculty = _group_faculty;
+        }
+
+        const string &GroupSchedule::get_group_magic_number() const {
+            return _group_magic_number;
+        }
+
+        void GroupSchedule::set_group_magic_number(const string &group_magic_number) {
+            _group_magic_number = group_magic_number;
+        }
+
         const Lesson &GroupSchedule::get_lesson(int parity, int day, int lesson_number) const {
             _check_parity_day_and_lesson(parity, day, lesson_number);
 
@@ -47,8 +63,9 @@ namespace scheduler {
             }
         }
 
+        // create json-like string representation of group
         string GroupSchedule::to_string() const {
-            string result = "GroupSchedule for '" + _group_name + "': {\n\t";
+            string result = "GroupSchedule for '" + _group_name + "' on '" + _group_faculty + "' faculty: {\n\t";
             for (int parity = 1; parity < 3; parity++) {
                 result += "\"" + std::to_string(parity) + "\": {\n\t\t";
                 for (int day_number = 1; day_number < 7; day_number++) {

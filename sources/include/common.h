@@ -17,7 +17,7 @@ using namespace xlnt;
 namespace scheduler {
     class Lesson;
 
-    using cell_index_t = uint64_t;
+    using schedule_index_t = uint64_t;
     using day_template = unordered_map<int, Lesson>;
     using week_template = unordered_map<int, day_template>;
     using parity_week_template = unordered_map<int, week_template>;
