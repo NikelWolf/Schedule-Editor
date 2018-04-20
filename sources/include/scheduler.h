@@ -14,9 +14,9 @@ namespace scheduler {
 
         bool is_group_in_schedule(const string &group_name) const;
 
-        const GroupSchedule &get_group(const string &group_name) const;
-
         const vector<GroupSchedule> &get_groups() const;
+
+        const GroupSchedule &get_group(const string &group_name) const;
 
         void add_group(const GroupSchedule &gs);
 
@@ -39,6 +39,8 @@ namespace scheduler {
         string _filter_cell_info(const string &cell_value) const;
 
         Lesson _fill_lesson(GroupSchedule &gs, pair<schedule_index_t, schedule_index_t> start_position) const;
+
+        void _get_metainfo_for_group(GroupSchedule &gs, pair<schedule_index_t, schedule_index_t> start_position);
 
         void _get_schedule_for_group(GroupSchedule &gs, pair<schedule_index_t, schedule_index_t> start_position);
 

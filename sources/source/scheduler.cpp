@@ -19,6 +19,10 @@ namespace scheduler {
         return false;
     }
 
+    const vector<GroupSchedule> &Scheduler::get_groups() const {
+        return _groups;
+    }
+
     const GroupSchedule &Scheduler::get_group(const string &group_name) const {
         if (!GroupSchedule::is_group_name_valid(group_name)) {
             throw ScheduleError{"group name '" + group_name + "' is invalid"};
@@ -31,10 +35,6 @@ namespace scheduler {
         }
 
         throw ScheduleError{"group '" + group_name + "' is not in schedule"};
-    }
-
-    const vector<GroupSchedule> &Scheduler::get_groups() const {
-        return _groups;
     }
 
     void Scheduler::add_group(const GroupSchedule &gs) {
@@ -123,6 +123,12 @@ namespace scheduler {
         return lesson;
     }
 
+    void Scheduler::_get_metainfo_for_group(GroupSchedule &gs, pair<schedule_index_t, schedule_index_t> start_position) {
+        gs.set_group_name(_schedule.get_cell(start_position.first, start_position.second));
+        gs.set_group_faculty(_schedule.get_cell(start_position.first, start_position.second + 2));
+        gs.set_group_magic_number(_schedule.get_cell(start_position.first, start_position.second + 3));
+    }
+
     void Scheduler::_get_schedule_for_group(GroupSchedule &gs, pair<schedule_index_t, schedule_index_t> start_position) {
         int free_day = 0;
         schedule_index_t row_number = start_position.first + 2, column_number = start_position.second;
@@ -162,11 +168,11 @@ namespace scheduler {
 
         for (schedule_index_t column = 0; column < _schedule.get_max_column_index(); column++) {
             if (GroupSchedule::is_group_name_valid(_schedule.get_cell(group_name_row, column))) {
-                GroupSchedule gs{_schedule.get_cell(group_name_row, column)};
-                gs.set_group_faculty(_schedule.get_cell(group_name_row, column + 2));
-                gs.set_group_magic_number(_schedule.get_cell(group_name_row, column + 3));
+                GroupSchedule gs;
+                pair<schedule_index_t, schedule_index_t> group_position{group_name_row, column};
 
-                _get_schedule_for_group(gs, pair<schedule_index_t, schedule_index_t>{group_name_row, column});
+                _get_metainfo_for_group(gs, group_position);
+                _get_schedule_for_group(gs, group_position);
                 _groups.push_back(gs);
             }
         }
@@ -174,8 +180,6 @@ namespace scheduler {
 
     // TODO: implent filling information about group into schedule
     void Scheduler::_write_groups_into_schedule() {
-        throw ScheduleError{"not implemented"};
-
         int groups_counter = 0;
         schedule_index_t names_row = 1;
         schedule_index_t current_column = 5;
