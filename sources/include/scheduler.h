@@ -2,13 +2,10 @@
 
 #include "common.h"
 
-// TODO: create separate library from scheduler sources
-
 namespace scheduler {
     class Scheduler {
     public:
-        // TODO: implement creating new schedule file for 36 max groups with color support and right schedule cells format
-        Scheduler(): _schedule{""} { throw ScheduleError{"not implemented"}; }
+        Scheduler();
 
         explicit Scheduler(const string &file_name);
 
@@ -27,6 +24,10 @@ namespace scheduler {
         friend ostream &operator<<(ostream &os, const Scheduler &scheduler);
 
     private:
+        const static string _default_schedule_template_file;
+        const static string _default_schedule_filename;
+        const static uint _max_groups_count;
+
         XlsxFile _schedule;
         vector<GroupSchedule> _groups{};
 
@@ -45,8 +46,5 @@ namespace scheduler {
         void _get_schedule_for_group(GroupSchedule &gs, pair<schedule_index_t, schedule_index_t> start_position);
 
         void _parse_schedule();
-
-        // TODO: implement
-        void _write_groups_into_schedule();
     };
 }

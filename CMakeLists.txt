@@ -53,7 +53,7 @@ target_link_libraries(${PROJECT_NAME} Qt5::Gui)
 target_link_libraries(${PROJECT_NAME} Qt5::Widgets)
 target_link_libraries(${PROJECT_NAME} Qt5::Sql)
 
-configure_file(${RESOURCES_DIR}/schedule_default_template.xlsx ${CMAKE_BINARY_DIR}/jstf.dat COPYONLY)
+configure_file(${RESOURCES_DIR}/schedule_template.xlsx ${CMAKE_BINARY_DIR}/jstf.dat COPYONLY)
 
 if (DEV_BUILD)
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${RESOURCES_DIR} ${CMAKE_BINARY_DIR}/resources)

@@ -1,3 +1,11 @@
+/**
+ * \file
+ * \brief Header file with common for project definitions
+ *
+ * common.h gathers all project headers and other useful definitions in one file
+ * like std headers for input/output or data structures like map and vector or third-party header for xlnt library
+ */
+
 #pragma once
 
 #include <iostream>

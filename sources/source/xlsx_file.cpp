@@ -20,11 +20,11 @@ namespace scheduler {
         }
     }
 
-    unsigned long XlsxFile::get_max_row_index() const {
+    schedule_index_t XlsxFile::get_max_row_index() const {
         return _max_row;
     }
 
-    unsigned long XlsxFile::get_max_column_index() const {
+    schedule_index_t XlsxFile::get_max_column_index() const {
         return _max_column;
     }
 
@@ -34,7 +34,6 @@ namespace scheduler {
 
     const vector<XlsxFile::XlsxCell> &XlsxFile::get_row(schedule_index_t index) const {
         _check_indices(index, 0);
-
 
         return _xlsx_info[index];
     }
@@ -59,6 +58,15 @@ namespace scheduler {
         return _file_name;
     }
 
+    void XlsxFile::set_file_name(const string& new_filename) {
+        _file_name = new_filename;
+    }
+
+    void XlsxFile::write_as(const string& new_filename) {
+        set_file_name(new_filename);
+        write();
+    }
+
     void XlsxFile::write() {
         for (schedule_index_t row = 1; row < _max_row + 1; row++) {
             for (schedule_index_t column = 1; column < _max_column + 1; column++) {
@@ -71,11 +79,15 @@ namespace scheduler {
         _wb.save(_file_name);
 
         _file_was_changed = false;
-        _file_was_saved = false;
+        _file_was_saved = true;
     }
 
     void XlsxFile::save() {
         _file_was_saved = true;
+    }
+
+    void XlsxFile::discard_saving() {
+        _file_was_saved = false;
     }
 
     void XlsxFile::_load_xlsx_into_info() {

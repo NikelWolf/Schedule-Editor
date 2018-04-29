@@ -10,14 +10,13 @@ namespace scheduler {
             bool __was_changed = false;
         };
 
-
         explicit XlsxFile(const string &file_name);
 
         virtual ~XlsxFile();
 
-        unsigned long get_max_row_index() const;
+        schedule_index_t get_max_row_index() const;
 
-        unsigned long get_max_column_index() const;
+        schedule_index_t get_max_column_index() const;
 
         const vector<vector<XlsxCell>> &get_rows() const;
 
@@ -29,9 +28,15 @@ namespace scheduler {
 
         const string &get_file_name() const;
 
+        void set_file_name(const string& new_filename);
+
+        void write_as(const string& new_filename);
+
         void write();
 
         void save();
+
+        void discard_saving();
 
     private:
         bool _file_was_changed = false;

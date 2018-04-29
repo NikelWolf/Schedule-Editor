@@ -1,6 +1,14 @@
 #include "common.h"
 
 namespace scheduler {
+    const string Scheduler::_default_schedule_template_file{"jstf.dat"};
+    const string Scheduler::_default_schedule_filename{"schedule.xlsx"};
+    const uint Scheduler::_max_groups_count = 36;
+
+    Scheduler::Scheduler(): _schedule{_default_schedule_template_file} {
+        _schedule.set_file_name(_default_schedule_filename);
+    }
+
     Scheduler::Scheduler(const string &file_name): _schedule{file_name} {
         _parse_schedule();
     }
@@ -38,14 +46,14 @@ namespace scheduler {
     }
 
     void Scheduler::add_group(const GroupSchedule &gs) {
-        if (_groups.size() < 36) {
+        if (_groups.size() < _max_groups_count) {
             if(is_group_in_schedule(gs.get_group_name())) {
                 _groups[_get_group_index(gs.get_group_name())] = gs;
             } else {
                 _groups.push_back(gs);
             }
         } else {
-            throw ScheduleError{"max supported count of groups in schedule file is 36"};
+            throw ScheduleError{"max supported count of groups in schedule file is " + Scheduler::_max_groups_count};
         }
     }
 
@@ -175,35 +183,6 @@ namespace scheduler {
                 _get_schedule_for_group(gs, group_position);
                 _groups.push_back(gs);
             }
-        }
-    }
-
-    // TODO: implent filling information about group into schedule
-    void Scheduler::_write_groups_into_schedule() {
-        int groups_counter = 0;
-        schedule_index_t names_row = 1;
-        schedule_index_t current_column = 5;
-        for (GroupSchedule &gs: _groups) {
-            if (groups_counter != 0 && groups_counter % 3 == 0) {
-                current_column += 5;
-            }
-
-            _schedule.set_cell(names_row, current_column, gs.get_group_name());
-            _schedule.set_cell(names_row, current_column + 2, gs.get_group_faculty());
-            _schedule.set_cell(names_row, current_column + 3, gs.get_group_magic_number());
-
-            for (int day = 1; day < 7; day++) {
-                for (int lesson_number = 1; lesson_number < 7; lesson_number++) {
-                    for (int parity = 1; parity < 3; parity++) {
-                        const Lesson &l = gs.get_lesson(parity, day, lesson_number);
-
-
-                    }
-                }
-            }
-
-            current_column += 4;
-            groups_counter++;
         }
     }
 }
