@@ -32,7 +32,7 @@ namespace scheduler {
         }
 
         void GroupSchedule::set_group_faculty(const string& group_faculty) {
-            _group_faculty = _group_faculty;
+            _group_faculty = group_faculty;
         }
 
         const string &GroupSchedule::get_group_magic_number() const {
@@ -65,7 +65,8 @@ namespace scheduler {
 
         // create json-like string representation of group
         string GroupSchedule::to_string() const {
-            string result = "GroupSchedule for '" + _group_name + "' on '" + _group_faculty + "' faculty: {\n\t";
+            string result = "GroupSchedule for '" + _group_name + "' on '" + _group_faculty + "' faculty with '" +
+                            _group_magic_number + "' magic number: {\n\t";
             for (int parity = 1; parity < 3; parity++) {
                 result += "\"" + std::to_string(parity) + "\": {\n\t\t";
                 for (int day_number = 1; day_number < 7; day_number++) {

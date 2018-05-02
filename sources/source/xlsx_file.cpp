@@ -60,6 +60,10 @@ namespace scheduler {
 
     void XlsxFile::set_file_name(const string& new_filename) {
         _file_name = new_filename;
+
+        if (new_filename.find(".xlsx") != new_filename.size() - 5) {
+            _file_name += ".xlsx";
+        }
     }
 
     void XlsxFile::write_as(const string& new_filename) {

@@ -11,6 +11,10 @@ namespace scheduler {
 
         bool is_group_in_schedule(const string &group_name) const;
 
+        const string &get_schedule_filename() const;
+
+        void set_schedule_filename(const string &filename);
+
         const vector<GroupSchedule> &get_groups() const;
 
         const GroupSchedule &get_group(const string &group_name) const;
@@ -18,6 +22,24 @@ namespace scheduler {
         void add_group(const GroupSchedule &gs);
 
         void remove_group(const string &group_name);
+
+        const string &get_cource_metainfo() const;
+
+        void set_cource_metainfo(const string &metainfo_string);
+
+        const string &get_confirmation_metainfo() const;
+
+        void set_confirmation_metainfo(const string &metainfo_string);
+
+        const pair<string, string> get_UMD_head_metainfo() const;
+
+        void set_UMD_head_metainfo(const pair<string, string> &metainfo);
+
+        const pair<string, string> get_headmaster_metainfo() const;
+
+        void set_headmaster_metainfo(const pair<string, string> &metainfo);
+
+        void save_schedule();
 
         string to_string() const;
 
@@ -31,20 +53,32 @@ namespace scheduler {
         XlsxFile _schedule;
         vector<GroupSchedule> _groups{};
 
+        string _schedule_date_and_course_metainfo;
+        string _confirmation_metainfo;
+        pair<string, string> _UMD_head_metainfo;
+        pair<string, string> _headmaster_metainfo;
+
         schedule_index_t _get_group_name_row() const;
 
         int _get_group_index(const string &group_name) const;
 
         bool _check_for_free_day(GroupSchedule &gs, pair<schedule_index_t, schedule_index_t> start_position) const;
 
-        string _filter_cell_info(const string &cell_value) const;
-
         Lesson _fill_lesson(GroupSchedule &gs, pair<schedule_index_t, schedule_index_t> start_position) const;
 
-        void _get_metainfo_for_group(GroupSchedule &gs, pair<schedule_index_t, schedule_index_t> start_position);
+        void _parse_metainfo_for_group(GroupSchedule &gs, pair<schedule_index_t, schedule_index_t> start_position);
 
-        void _get_schedule_for_group(GroupSchedule &gs, pair<schedule_index_t, schedule_index_t> start_position);
+        void _parse_schedule_for_group(GroupSchedule &gs, pair<schedule_index_t, schedule_index_t> start_position);
+
+        void _parse_schedule_metainfo();
 
         void _parse_schedule();
+
+        void _load_schedule_metainfo_into_file();
+
+        void _load_single_group_into_file(GroupSchedule &gs, schedule_index_t group_row,
+                                          schedule_index_t group_start_position);
+
+        void _load_groups_into_file();
     };
 }

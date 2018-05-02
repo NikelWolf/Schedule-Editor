@@ -24,6 +24,7 @@ namespace scheduler {
         const string &get_group_magic_number() const;
 
         void set_group_magic_number(const string &group_magic_number);
+
         const Lesson &get_lesson(int parity, int day, int lesson_number) const;
 
         void set_lesson(int parity, int day, int lesson_number, const Lesson &lesson);

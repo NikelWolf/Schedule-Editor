@@ -9,7 +9,7 @@ find_package(Qt5Gui REQUIRED)
 find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Sql REQUIRED)
 
-option(DEV_BUILD ON) # if build dev than windows will have console on sturtup and schedule template will be copied into build folder
+set(DEV_BUILD TRUE) # if build dev than windows will have console on sturtup and schedule template will be copied into build folder
 
 set(XLNT_HomeDir ${CMAKE_SOURCE_DIR}/third-party/xlnt)
 add_subdirectory(${XLNT_HomeDir})
@@ -53,7 +53,7 @@ target_link_libraries(${PROJECT_NAME} Qt5::Gui)
 target_link_libraries(${PROJECT_NAME} Qt5::Widgets)
 target_link_libraries(${PROJECT_NAME} Qt5::Sql)
 
-configure_file(${RESOURCES_DIR}/schedule_template.xlsx ${CMAKE_BINARY_DIR}/jstf.dat COPYONLY)
+configure_file(${RESOURCES_DIR}/schedule_default_template.xlsx ${CMAKE_BINARY_DIR}/jstf.dat COPYONLY)
 
 if (DEV_BUILD)
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${RESOURCES_DIR} ${CMAKE_BINARY_DIR}/resources)
