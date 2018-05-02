@@ -121,14 +121,8 @@ namespace scheduler {
                         "\n\tUMD head: \"" + _UMD_head_metainfo.first + "\" \"" + _UMD_head_metainfo.second + "\"" +
                         "\n\theadmaster: \"" + _headmaster_metainfo.first + "\" \"" + _headmaster_metainfo.second +
                         "\"\n";
-        string separator;
-        for (int i = 0; i < 50; i++) {
-            separator += "=";
-        }
-        separator += "\n";
-        result += separator;
         for (const GroupSchedule &gs: _groups) {
-            result += gs.to_string() + "\n" + separator;
+            result += gs.to_string() + "\n";
         }
         return result;
     }
