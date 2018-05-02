@@ -112,10 +112,10 @@ namespace scheduler {
     }
 
     void XlsxFile::_check_indices(schedule_index_t row, schedule_index_t column) const {
-        if (row >= _max_row || row < 0)
+        if (row >= _max_row)
             throw ScheduleError{"row " + to_string(row) + " is not accessible"};
 
-        if (column >= _max_column || column < 0)
+        if (column >= _max_column)
             throw ScheduleError{"column " + to_string(column) + " is not accessible"};
     }
 }

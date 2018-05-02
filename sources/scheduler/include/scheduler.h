@@ -62,9 +62,9 @@ namespace scheduler {
 
         int _get_group_index(const string &group_name) const;
 
-        bool _check_for_free_day(GroupSchedule &gs, pair<schedule_index_t, schedule_index_t> start_position) const;
+        bool _check_for_free_day(pair<schedule_index_t, schedule_index_t> start_position) const;
 
-        Lesson _fill_lesson(GroupSchedule &gs, pair<schedule_index_t, schedule_index_t> start_position) const;
+        Lesson _fill_lesson(pair<schedule_index_t, schedule_index_t> start_position) const;
 
         void _parse_metainfo_for_group(GroupSchedule &gs, pair<schedule_index_t, schedule_index_t> start_position);
 

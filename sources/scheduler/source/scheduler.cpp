@@ -146,6 +146,8 @@ namespace scheduler {
                 }
             }
         }
+
+        throw ScheduleError{"wrong format for schedule: there is no row with group names"};
     }
 
     int Scheduler::_get_group_index(const string &group_name) const {
@@ -161,7 +163,7 @@ namespace scheduler {
         return group_index;
     }
 
-    bool Scheduler::_check_for_free_day(GroupSchedule &gs, pair<schedule_index_t, schedule_index_t> start_position) const {
+    bool Scheduler::_check_for_free_day(pair<schedule_index_t, schedule_index_t> start_position) const {
         schedule_index_t row_number = start_position.first, column_number = start_position.second;
 
         if (_schedule.get_cell(row_number, column_number) != "День") {
@@ -175,7 +177,7 @@ namespace scheduler {
         return perhaps_free_day_string == "День самостоятельных занятий";
     }
 
-    Lesson Scheduler::_fill_lesson(GroupSchedule &gs, pair<schedule_index_t, schedule_index_t> start_position) const {
+    Lesson Scheduler::_fill_lesson(pair<schedule_index_t, schedule_index_t> start_position) const {
         vector<string> cells;
         for (int i = 0; i < 4; i++) {
             cells.push_back(_schedule.get_cell(start_position.first, start_position.second + i));
@@ -205,11 +207,11 @@ namespace scheduler {
                         gs.add_addition_message(addition_message, day);
                     }
 
-                    if (_check_for_free_day(gs, pair<schedule_index_t, schedule_index_t>{row_number, column_number})) {
+                    if (_check_for_free_day(pair<schedule_index_t, schedule_index_t>{row_number, column_number})) {
                         gs.add_addition_message("День самостоятельных занятий", day);
                     }
 
-                    Lesson lesson = _fill_lesson(gs, pair<schedule_index_t, schedule_index_t>{row_number, column_number});
+                    Lesson lesson = _fill_lesson(pair<schedule_index_t, schedule_index_t>{row_number, column_number});
                     gs.set_lesson(parity, day, lesson_number, lesson);
 
                     row_number++;

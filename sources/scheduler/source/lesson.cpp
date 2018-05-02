@@ -82,7 +82,7 @@ namespace scheduler {
                             "\tprofessor: \"" + _professor + "\"," + intends +
                             "\troom: \"" + _room + "\"," + intends +
                             "\tadditions: [";
-        for (int i = 0; i < _additions.size(); i++) {
+        for (uint i = 0; i < _additions.size(); i++) {
             str_lesson += intends + "\t\t\"" + _additions[i] + (i != _additions.size() - 1 ? "\"," : "\"");
         }
         str_lesson += intends + "\t]" + intends + "}";
