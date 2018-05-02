@@ -40,8 +40,6 @@ if (DEV_BUILD)
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${RESOURCES_DIR} ${CMAKE_BINARY_DIR}/resources)
 endif()
 
-message(${Qt5Core_DIR})
-
 if (WIN32)
     set(QT_BIN_VERSION_PATH ${Qt5Core_DIR}/../../../bin)
     set(dll_file

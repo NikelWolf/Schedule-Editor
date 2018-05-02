@@ -11,5 +11,8 @@ int main(int argc, char *argv[]) {
         return 0;
     }
 
+    Scheduler scheduler{argv[1]};
+    cout << scheduler << endl;
+
     return 0;
 }

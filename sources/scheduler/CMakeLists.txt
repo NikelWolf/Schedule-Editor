@@ -97,8 +97,9 @@ elseif (UNIX)
     set(LIBS_END_POSTFIX "so")
 endif ()
 
+file(GLOB xlntfiles ${CMAKE_BINARY_DIR}/sources/scheduler/third-party/xlnt/source/libxlnt*)
+file(GLOB schedulerfiles ${CMAKE_BINARY_DIR}/sources/scheduler/libscheduler*)
+set(allfiles ${xlntfiles} ${schedulerfiles})
+
 add_custom_command(TARGET ${LIBRARY_NAME} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/third-party/xlnt/source/libxlntd.${LIBS_END_POSTFIX}
-        ${CMAKE_BINARY_DIR}/libxlntd.${LIBS_END_POSTFIX}
-        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/libschedulerd.${LIBS_END_POSTFIX}
-${CMAKE_BINARY_DIR}/libschedulerd.${LIBS_END_POSTFIX})
+        COMMAND ${CMAKE_COMMAND} -E copy ${allfiles} ${CMAKE_BINARY_DIR})
