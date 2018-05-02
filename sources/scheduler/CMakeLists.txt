@@ -91,15 +91,35 @@ endif ()
 configure_file(${SCHEDULER_RESOURCES_DIR}/schedule_default_template.xlsx
         ${CMAKE_BINARY_DIR}/jstf.dat COPYONLY)
 
-if (WIN32)
-    set(LIBS_END_POSTFIX "dll")
-elseif (UNIX)
-    set(LIBS_END_POSTFIX "so")
-endif ()
+if(WIN32)
+    if(CMAKE_BUILD_TYPE MATCHES "Debug")
+        set(DEBUG_SYMBOL "d")
+    endif()
 
-file(GLOB xlntfiles ${CMAKE_BINARY_DIR}/sources/scheduler/third-party/xlnt/source/libxlnt*)
-file(GLOB schedulerfiles ${CMAKE_BINARY_DIR}/sources/scheduler/libscheduler*)
-set(allfiles ${xlntfiles} ${schedulerfiles})
+    set(shared_libs
+            ${CMAKE_CURRENT_BINARY_DIR}/third-party/xlnt/source/libxlnt${DEBUG_SYMBOL}.dll
+            ${CMAKE_CURRENT_BINARY_DIR}/libscheduler${DEBUG_SYMBOL}.dll )
+elseif(UNIX)
+    if(CMAKE_BUILD_TYPE MATCHES "Debug")
+        add_custom_command(TARGET ${LIBRARY_NAME} POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/sources/scheduler/third-party/xlnt/source/libxlntd.so.1.2 ${CMAKE_BINARY_DIR}
+                COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/sources/scheduler/third-party/xlnt/source/libxlntd.so ${CMAKE_BINARY_DIR}
+                COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/sources/scheduler/libschedulerd.so.1.0 ${CMAKE_BINARY_DIR}
+                COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/sources/scheduler/libschedulerd.so ${CMAKE_BINARY_DIR})
+    else()
+        add_custom_command(TARGET ${LIBRARY_NAME} POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/sources/scheduler/third-party/xlnt/source/libxlnt.so.1.2 ${CMAKE_BINARY_DIR}
+                COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/sources/scheduler/third-party/xlnt/source/libxlnt.so ${CMAKE_BINARY_DIR}
+                COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/sources/scheduler/libscheduler.so.1.0 ${CMAKE_BINARY_DIR}
+                COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/sources/scheduler/libscheduler.so ${CMAKE_BINARY_DIR})
+    endif()
 
-add_custom_command(TARGET ${LIBRARY_NAME} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy ${allfiles} ${CMAKE_BINARY_DIR})
+    set(XLNT_VERSION 1.2)
+
+    set(shared_libs
+            ${CMAKE_CURRENT_BINARY_DIR}/third-party/xlnt/source/libxlnt${DEBUG_SYMBOL}.so.${XLNT_VERSION}
+            ${CMAKE_CURRENT_BINARY_DIR}/third-party/xlnt/source/libxlnt${DEBUG_SYMBOL}.so
+            ${CMAKE_CURRENT_BINARY_DIR}/libscheduler${DEBUG_SYMBOL}.so.${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
+            ${CMAKE_CURRENT_BINARY_DIR}/libscheduler${DEBUG_SYMBOL}.so
+            )
+endif()
