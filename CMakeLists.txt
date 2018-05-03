@@ -51,7 +51,8 @@ if (WIN32)
             # MinGW libraries
                 ${QT_BIN_VERSION_PATH}/libgcc_s_dw2-1.dll
                 ${QT_BIN_VERSION_PATH}/libstdc++-6.dll
-            ${QT_BIN_VERSION_PATH}/libwinpthread-1.dll)
+                ${QT_BIN_VERSION_PATH}/libwinpthread-1.dll
+            )
 
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy

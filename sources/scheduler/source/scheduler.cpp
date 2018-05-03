@@ -3,7 +3,7 @@
 namespace scheduler {
     const string Scheduler::_default_schedule_template_file{"jstf.dat"};
     const string Scheduler::_default_schedule_filename{"schedule.xlsx"};
-    const uint Scheduler::_max_groups_count = 36;
+    const uint8_t Scheduler::_max_groups_count = 36;
 
     Scheduler::Scheduler(): _schedule{_default_schedule_template_file} {
         _schedule.set_file_name(_default_schedule_filename);
@@ -249,7 +249,7 @@ namespace scheduler {
         pair<schedule_index_t, schedule_index_t> lower_headmaster_columns{11, 14};
 
 
-        for (uint i = 0; i < _max_groups_count / 3; i++,
+        for (uint8_t i = 0; i < _max_groups_count / 3; i++,
                 upper_row_columns.first += 17,
                 upper_row_columns.second += 17,
                 lower_UMD_columns.first += 17,
@@ -293,7 +293,7 @@ namespace scheduler {
     void Scheduler::_load_groups_into_file() {
         schedule_index_t group_row = 1;
         schedule_index_t group_column = 5;
-        for (uint i = 1; i <= _groups.size(); i++) {
+        for (uint8_t i = 1; i <= _groups.size(); i++) {
             GroupSchedule &gs = _groups.at(i - 1);
             _load_single_group_into_file(gs, group_row, group_column);
 
