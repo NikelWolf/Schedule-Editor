@@ -48,7 +48,7 @@ namespace scheduler {
     private:
         const static string _default_schedule_template_file;
         const static string _default_schedule_filename;
-        const static uint _max_groups_count;
+        const static uint8_t _max_groups_count;
 
         XlsxFile _schedule;
         vector<GroupSchedule> _groups{};
