@@ -11,22 +11,20 @@ WGroup::WGroup(QWidget *parent) : QWidget(parent) {
 WGroup::WGroup(const GroupSchedule &group, QWidget *parent) : QWidget(parent) {
     this->group = group;
     for (unsigned int i = 0; i < wdays.size(); ++i) {
-        wdays[i] = new WDay(week[i], this);
+
+        int k = 0;
+        for (int j = 0; j < 6; ++j) {
+            lessons[i][j] = group.get_lesson(k%2+1, i+1, j+1);
+            ++k;
+        }
+        wdays[i] = new WDay(week[i], lessons[i], this);
     }
     createWidgets();
     QString str = QString::fromStdString(group.get_group_name());
-    qDebug()<<str;
-    std::cout<<group.get_group_name()<< "!!!!!!!!!!!!!!!!!!!!!!!!";
-
     wlineEdits[0]->setText(str);
-    str = QString::fromStdString(group.get_group_faculty());
-    qDebug()<<str;
-    std::cout<<group.get_group_faculty();
-
+     str = QString::fromStdString(group.get_group_faculty());
     wlineEdits[1]->setText(str);
     str = QString::fromStdString(group.get_group_magic_number());
-    qDebug()<<str;
-    std::cout<<group.get_group_magic_number();
     wlineEdits[2]->setText(str);
 }
 
@@ -66,7 +64,6 @@ void WGroup::createWidgets() {
     headerLayout->addWidget(wlineEdits[1], r, c, 1, 2);
     c += 2;
     headerLayout->addWidget(wlineEdits[2], r, c);
-
 
     groupLayout->addLayout(headerLayout);
 

@@ -3,9 +3,6 @@
 
 #include <QtWidgets>
 #include <WDay.h>
-#include "scheduler.h"
-
-using namespace scheduler;
 
 static const QSize hedSize[] = { //todo wgroup size
         {30,  h},
@@ -30,6 +27,7 @@ private:
     std::array<WDay *, 6> wdays;
     std::array<QLabel *, 10> wlabels;
     std::array<QLineEdit *, 3> wlineEdits;
+    std::array<std::array<Lesson, 6>, 6> lessons;
 
     GroupSchedule group;
 
@@ -47,7 +45,7 @@ private:
     };
 
     QStringList week = {
-            {"Пн"},//todo
+            {"Пн"},
             {"Вт"},
             {"Ср"},
             {"Чт"},

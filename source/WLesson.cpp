@@ -1,13 +1,17 @@
 #include "WLesson.h"
-
 WLesson::WLesson(int lessonNumber, QStringList &time, QWidget *parent) : QWidget(parent) {
     createWidgets(lessonNumber, time);
 }
 
+WLesson::WLesson(int lessonNumber, QStringList &time, Lesson lesson, QWidget *parent) : QWidget(parent) {
+    createWidgets(lessonNumber, time);
+    lesson.get_subject_name();
+}
+
 WLesson::~WLesson() {
-    delete labelsLayout;
-    delete textLayout;
-    //todo
+    //delete labelsLayout;
+    //delete textLayout;
+    //todo check memory with valgrind
 }
 
 void WLesson::createWidgets(int lessonNumber, QStringList &time) {

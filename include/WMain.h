@@ -3,12 +3,13 @@
 
 #include <QMainWindow>
 #include <QScrollArea>
-#include "WSchedule.h"
+#include "scheduler.h"
+using namespace scheduler;
 
 class WMain : public QMainWindow {
 Q_OBJECT
 public:
-    explicit WMain(QWidget *parent = nullptr);
+    explicit WMain(Scheduler &scheduler, QWidget *parent = nullptr);
 
 signals:
 

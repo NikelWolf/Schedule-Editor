@@ -2,6 +2,8 @@
 #define WLESSON_H
 
 #include <QtWidgets>
+#include "scheduler.h"
+using namespace scheduler;
 
 const unsigned int h = 71;
 
@@ -19,6 +21,7 @@ class WLesson : public QWidget {
 Q_OBJECT
 private:
     void createWidgets(int lessonNumber, QStringList &time);
+    std::array<Lesson, 6> lessons;
 
 public:
     QGridLayout *labelsLayout;
@@ -28,6 +31,7 @@ public:
     std::array<QTextEdit *, 8> textEdits;
 
     WLesson(int lessonNumber, QStringList &time, QWidget *parent = nullptr);
+    WLesson(int lessonNumber, QStringList &time, Lesson lesson, QWidget *parent = nullptr);
 
     ~WLesson() override;
 

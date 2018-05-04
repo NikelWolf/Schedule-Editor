@@ -1,6 +1,7 @@
 #include "WMain.h"
+#include <WSchedule.h>
 
-WMain::WMain(QWidget *parent) : QMainWindow(parent) {
+WMain::WMain(Scheduler &scheduler, QWidget *parent) : QMainWindow(parent) {
     auto *menuBar = new QMenuBar(this);
     QMenu *menu = new QMenu("&Menu", this);
     menu->setTearOffEnabled(true);
@@ -15,11 +16,6 @@ WMain::WMain(QWidget *parent) : QMainWindow(parent) {
     setCentralWidget(scroll);
     this->layout()->setMenuBar(menuBar);
 
-    Scheduler scheduler("/home/nick/Projects/orig.xlsx");
-
-    std::cout <<scheduler.get_groups().at(0).get_group_magic_number() << endl;
-
-    //std::cout <<scheduler.get_groups().at(0).get_group_magic_number();
-    //auto *schedule = new WSchedule(scheduler.get_groups(), this);
-    //scroll->setWidget(schedule);
+    auto *schedule = new WSchedule(scheduler.get_groups(), this);
+    scroll->setWidget(schedule);
 }
