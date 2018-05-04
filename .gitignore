@@ -1,4 +1,1 @@
-build/
 cmake-build*
-third-party/xlnt/src
-third-party/xlnt/tmp

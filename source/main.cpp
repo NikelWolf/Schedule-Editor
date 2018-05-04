@@ -2,6 +2,11 @@
 
 #include <scheduler.h>
 
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QWidget>
+#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QLabel>
+
 using namespace std;
 using namespace scheduler;
 

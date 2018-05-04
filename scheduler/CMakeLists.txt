@@ -91,25 +91,25 @@ endif ()
 configure_file(${SCHEDULER_RESOURCES_DIR}/schedule_default_template.xlsx
         ${CMAKE_BINARY_DIR}/jstf.dat COPYONLY)
 
-if(CMAKE_BUILD_TYPE MATCHES "Debug")
+if (CMAKE_BUILD_TYPE MATCHES "Debug")
     set(DEBUG_SYMBOL "d")
-endif()
+endif ()
 
-if(WIN32)
+if (WIN32)
     set(shared_libs
             ${CMAKE_CURRENT_BINARY_DIR}/third-party/xlnt/source/libxlnt${DEBUG_SYMBOL}.dll
-            ${CMAKE_CURRENT_BINARY_DIR}/libscheduler${DEBUG_SYMBOL}.dll )
-elseif(UNIX AND NOT APPLE)
+            ${CMAKE_CURRENT_BINARY_DIR}/libscheduler${DEBUG_SYMBOL}.dll)
+elseif (UNIX AND NOT APPLE)
     set(XLNT_VERSION 1.2)
 
     set(shared_libs
             ${CMAKE_CURRENT_BINARY_DIR}/third-party/xlnt/source/libxlnt${DEBUG_SYMBOL}.so.${XLNT_VERSION}
             ${CMAKE_CURRENT_BINARY_DIR}/third-party/xlnt/source/libxlnt${DEBUG_SYMBOL}.so
             ${CMAKE_CURRENT_BINARY_DIR}/libscheduler${DEBUG_SYMBOL}.so.${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
-            ${CMAKE_CURRENT_BINARY_DIR}/libscheduler${DEBUG_SYMBOL}.so )
-else()
+            ${CMAKE_CURRENT_BINARY_DIR}/libscheduler${DEBUG_SYMBOL}.so)
+else ()
     message(FATAL_ERROR "can not build on OSX yet")
-endif()
+endif ()
 
 add_custom_command(TARGET ${LIBRARY_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy ${shared_libs} ${CMAKE_BINARY_DIR})

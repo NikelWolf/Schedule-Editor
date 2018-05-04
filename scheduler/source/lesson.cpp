@@ -1,12 +1,12 @@
 #include "common.h"
 
 namespace scheduler {
-    Lesson::Lesson(): _subject_name{}, _lesson_type{}, _professor{}, _room{}, _additions{} {}
+    Lesson::Lesson() : _subject_name{}, _lesson_type{}, _professor{}, _room{}, _additions{} {}
 
 
-    Lesson::Lesson(string subject_name, string lesson_type, string professor, string room):
-                    _subject_name{move(subject_name)}, _lesson_type{move(lesson_type)},
-                    _professor{move(professor)}, _room{move(room)}, _additions{} {}
+    Lesson::Lesson(string subject_name, string lesson_type, string professor, string room) :
+            _subject_name{move(subject_name)}, _lesson_type{move(lesson_type)},
+            _professor{move(professor)}, _room{move(room)}, _additions{} {}
 
     Lesson::Lesson(const Lesson &lesson) noexcept {
         _subject_name = lesson._subject_name;

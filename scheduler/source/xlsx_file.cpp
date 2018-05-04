@@ -6,7 +6,7 @@ namespace scheduler {
 
         try {
             _wb.load(_file_name);
-        } catch (xlnt::exception&) {
+        } catch (xlnt::exception &) {
             throw ScheduleError{"file '" + file_name + "' does not exist"};
         }
 
@@ -44,7 +44,7 @@ namespace scheduler {
         return _xlsx_info[row][column].value;
     }
 
-    void XlsxFile::set_cell(schedule_index_t row, schedule_index_t column, const string& value) {
+    void XlsxFile::set_cell(schedule_index_t row, schedule_index_t column, const string &value) {
         _check_indices(row, column);
 
         _file_was_changed = true;
@@ -58,7 +58,7 @@ namespace scheduler {
         return _file_name;
     }
 
-    void XlsxFile::set_file_name(const string& new_filename) {
+    void XlsxFile::set_file_name(const string &new_filename) {
         _file_name = new_filename;
 
         if (new_filename.find(".xlsx") != new_filename.size() - 5) {
@@ -66,7 +66,7 @@ namespace scheduler {
         }
     }
 
-    void XlsxFile::write_as(const string& new_filename) {
+    void XlsxFile::write_as(const string &new_filename) {
         set_file_name(new_filename);
         write();
     }
@@ -103,7 +103,7 @@ namespace scheduler {
             for (schedule_index_t column = 1; column <= _max_column; column++) {
                 try {
                     row_info.emplace_back(XlsxCell{_ws.cell(column, static_cast<row_t>(row)).to_string()});
-                } catch (out_of_range&) {
+                } catch (out_of_range &) {
                     row_info.emplace_back(XlsxCell{});
                 }
             }

@@ -34,9 +34,9 @@ namespace scheduler {
 
     string string_trim(string s);
 
-    vector<string> string_split(const string& input, const string& regex=R"(\s+)");
+    vector<string> string_split(const string &input, const string &regex = R"(\s+)");
 
-    string string_join(vector<string> &strings, const string &connector="");
+    string string_join(vector<string> &strings, const string &connector = "");
 }
 
 #include "schedule_error.h"

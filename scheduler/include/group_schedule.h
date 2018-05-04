@@ -15,11 +15,11 @@ namespace scheduler {
 
         const string &get_group_name() const;
 
-        void set_group_name(const string& group_name);
+        void set_group_name(const string &group_name);
 
         const string &get_group_faculty() const;
 
-        void set_group_faculty(const string& group_faculty);
+        void set_group_faculty(const string &group_faculty);
 
         const string &get_group_magic_number() const;
 

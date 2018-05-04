@@ -45,7 +45,7 @@ namespace scheduler {
 
         void add_additions(const vector<string> &additions);
 
-        string to_string(const string &intends="\n\t") const;
+        string to_string(const string &intends = "\n\t") const;
 
         friend ostream &operator<<(ostream &os, const Lesson &lesson);
 

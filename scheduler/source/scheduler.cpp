@@ -5,11 +5,11 @@ namespace scheduler {
     const string Scheduler::_default_schedule_filename{"schedule.xlsx"};
     const uint8_t Scheduler::_max_groups_count = 36;
 
-    Scheduler::Scheduler(): _schedule{_default_schedule_template_file} {
+    Scheduler::Scheduler() : _schedule{_default_schedule_template_file} {
         _schedule.set_file_name(_default_schedule_filename);
     }
 
-    Scheduler::Scheduler(const string &file_name): _schedule{file_name} {
+    Scheduler::Scheduler(const string &file_name) : _schedule{file_name} {
         _parse_schedule();
     }
 
@@ -55,7 +55,7 @@ namespace scheduler {
 
     void Scheduler::add_group(const GroupSchedule &gs) {
         if (_groups.size() < _max_groups_count) {
-            if(is_group_in_schedule(gs.get_group_name())) {
+            if (is_group_in_schedule(gs.get_group_name())) {
                 _groups[_get_group_index(gs.get_group_name())] = gs;
             } else {
                 _groups.push_back(gs);
@@ -197,7 +197,8 @@ namespace scheduler {
                     string subject_cell = _schedule.get_cell(row_number, column_number);
 
                     if (subject_cell == "Занятия по адресу:") {
-                        string addition_message = subject_cell + " " + _schedule.get_cell(row_number + 1, column_number);
+                        string addition_message =
+                                subject_cell + " " + _schedule.get_cell(row_number + 1, column_number);
                         gs.add_addition_message(addition_message, day);
                     }
 
