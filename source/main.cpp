@@ -1,8 +1,8 @@
 #include <iostream>
+
 #include <scheduler.h>
 
 using namespace std;
-
 using namespace scheduler;
 
 int main(int argc, char *argv[]) {

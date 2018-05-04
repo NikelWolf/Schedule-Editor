@@ -99,7 +99,7 @@ if(WIN32)
     set(shared_libs
             ${CMAKE_CURRENT_BINARY_DIR}/third-party/xlnt/source/libxlnt${DEBUG_SYMBOL}.dll
             ${CMAKE_CURRENT_BINARY_DIR}/libscheduler${DEBUG_SYMBOL}.dll )
-elseif(UNIX)
+elseif(UNIX AND NOT APPLE)
     set(XLNT_VERSION 1.2)
 
     set(shared_libs
@@ -107,6 +107,8 @@ elseif(UNIX)
             ${CMAKE_CURRENT_BINARY_DIR}/third-party/xlnt/source/libxlnt${DEBUG_SYMBOL}.so
             ${CMAKE_CURRENT_BINARY_DIR}/libscheduler${DEBUG_SYMBOL}.so.${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
             ${CMAKE_CURRENT_BINARY_DIR}/libscheduler${DEBUG_SYMBOL}.so )
+else()
+    message(FATAL_ERROR "can not build on OSX yet")
 endif()
 
 add_custom_command(TARGET ${LIBRARY_NAME} POST_BUILD
