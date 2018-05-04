@@ -1,27 +1,30 @@
 #include "WDay.h"
 
-WDay::WDay(QWidget *parent, QString dayOfWeek_) : QWidget(parent)
-{
-  QHBoxLayout* dayLayout = new QHBoxLayout;
-  QGridLayout* lessonsLayout = new QGridLayout;
+WDay::WDay(const QString &dayOfWeek, QWidget *parent) : QWidget(parent) {
+    createWidgets(dayOfWeek);
+}
 
-  dayLayout->setMargin(1);
-  dayLayout->setSpacing(1);
-  lessonsLayout->setMargin(1);
-  lessonsLayout->setSpacing(1);
+void WDay::createWidgets(const QString &dayOfWeek) {
+    auto *dayLayout = new QHBoxLayout(this);
+    auto *lessonsLayout = new QGridLayout();
 
-  for (int column = 0, i = 0; i < 6; column = 0, ++i){
-      lessons[i] = new WLesson(i+1, timeOfLesson[i]);
-      lessonsLayout->addLayout(lessons[i]->labelsLayout, i, column++);
-      lessonsLayout->addLayout(lessons[i]->textLayout, i, column);
-  }
 
-  dayOfWeek = new QLabel(dayOfWeek_);
-  dayOfWeek->setFixedSize(lesSize[0].width(), lesSize[0].height()*6.65); //todo
-  dayOfWeek->setStyleSheet("background-color: green");
-  dayOfWeek->setAlignment(Qt::AlignCenter);
+    for (int column = 0, i = 0; i < 6; column = 0, ++i) {
+        wlessons[i] = new WLesson(i + 1, timeOfLesson[i], this);
+        lessonsLayout->addLayout(wlessons[i]->labelsLayout, i, column++);
+        lessonsLayout->addLayout(wlessons[i]->textLayout, i, column);
+    }
 
-  dayLayout->addWidget(dayOfWeek);
-  dayLayout->addLayout(lessonsLayout);
-  this->setLayout(dayLayout);
+    wdayOfWeek = new QLabel(dayOfWeek, this);
+    wdayOfWeek->setFixedSize(lesSize[0].width(), lesSize[0].height() * 6.65); //todo day of week size
+    wdayOfWeek->setStyleSheet("background-color: gray");
+    wdayOfWeek->setAlignment(Qt::AlignCenter);
+
+    dayLayout->addWidget(wdayOfWeek);
+    dayLayout->addLayout(lessonsLayout);
+
+    dayLayout->setMargin(1);
+    dayLayout->setSpacing(1);
+    lessonsLayout->setMargin(1);
+    lessonsLayout->setSpacing(1);
 }

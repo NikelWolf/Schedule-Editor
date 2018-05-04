@@ -1,13 +1,13 @@
 #include "Sqlmanager.h"
 
 
-void SqlManager::createAllTables(){
+void SqlManager::createAllTables() {
     QSqlQuery query;
 
-    QString sheduleTable  = "CREATE TABLE shedule ("
-                   "inst_id TINYINT(1), curse_id TINYINT(1), group_id TINYINT(4), day_id TINYINT(1), "
-                   "num_id TINYINT(1), parity_id TINYINT(1), subj_id TINYINT(4), prof_id TINYINT(4), "
-                   "cab_id TINYINT(4) );";
+    QString sheduleTable = "CREATE TABLE shedule ("
+                           "inst_id TINYINT(1), curse_id TINYINT(1), group_id TINYINT(4), day_id TINYINT(1), "
+                           "num_id TINYINT(1), parity_id TINYINT(1), subj_id TINYINT(4), prof_id TINYINT(4), "
+                           "cab_id TINYINT(4) );";
     QString instituteTable = "CREATE TABLE institute( id TINYINT(4), name VARCHAR(20) );";
     QString coursesTable = "CREATE TABLE courses( id TINYINT(4), name VARCHAR(20) );";
     QString groupsTable = "CREATE TABLE groups( id TINYINT(4), name VARCHAR(20) );";
@@ -19,16 +19,16 @@ void SqlManager::createAllTables(){
     QString cabinetTable = "CREATE TABLE cabinet( id TINYINT(4), name VARCHAR(20) );";
 
     QStringList strExec = {
-        sheduleTable,
-        instituteTable,
-        coursesTable,
-        groupsTable,
-        day_of_weekTable,
-        subjectsTable,
-        proffesorsTable,
-        cabinetTable
+            sheduleTable,
+            instituteTable,
+            coursesTable,
+            groupsTable,
+            day_of_weekTable,
+            subjectsTable,
+            proffesorsTable,
+            cabinetTable
     };
-    for(QString str: strExec){
+    for (QString str: strExec) {
         if (!query.exec(str)) {
             qDebug() << "Unable to create " + str;
             qDebug() << query.lastError();
@@ -36,7 +36,7 @@ void SqlManager::createAllTables(){
     }
 }
 
-SqlManager::SqlManager(){
+SqlManager::SqlManager() {
 
     if (QFile::exists(db_path)) {
         qDebug() << "DB exists";
@@ -58,12 +58,12 @@ SqlManager::SqlManager(){
 //        qDebug() << query.lastError();
 //    }
     QString strF =
-          "INSERT INTO  shedule (inst_id, "
-          "curse_id, group_id, day_id, num_id, "
-          "parity_id, subj_id, prof_id, cab_id)"
-          " VALUES('%1', '%2', '%3', '%4', '%5', '%6', '%7', '%8', '%9');";
+            "INSERT INTO  shedule (inst_id, "
+            "curse_id, group_id, day_id, num_id, "
+            "parity_id, subj_id, prof_id, cab_id)"
+            " VALUES('%1', '%2', '%3', '%4', '%5', '%6', '%7', '%8', '%9');";
 
-    for(int i=1; i <10; ++i){
+    for (int i = 1; i < 10; ++i) {
         QString j = QString::number(i);
         strF = strF.arg(j);
 

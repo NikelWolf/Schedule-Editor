@@ -5,11 +5,10 @@
 #include <QScrollArea>
 #include "WSchedule.h"
 
-class WMain : public QMainWindow
-{
-  Q_OBJECT
+class WMain : public QMainWindow {
+Q_OBJECT
 public:
-  explicit WMain(QWidget *parent = nullptr);
+    explicit WMain(QWidget *parent = nullptr);
 
 signals:
 

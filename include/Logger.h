@@ -5,29 +5,33 @@
 #include <QTextStream>
 #include <QDateTime>
 #include <QDebug>
-
 #include <QLoggingCategory>
 
 Q_DECLARE_LOGGING_CATEGORY(log)
+
 Q_DECLARE_LOGGING_CATEGORY(gui)
+
 Q_DECLARE_LOGGING_CATEGORY(db)
+
 Q_DECLARE_LOGGING_CATEGORY(parse)
 
 
-class Logger : public QObject
-{
-  Q_OBJECT
+class Logger : public QObject {
+Q_OBJECT
 
 private:
-   static QScopedPointer<QFile>  logFile;
-   static void messageHandler(QtMsgType type,
-                              const QMessageLogContext &context,
-                       const QString &msg);
+    static QScopedPointer<QFile> logFile;
+
+    static void messageHandler(QtMsgType type,
+                               const QMessageLogContext &context,
+                               const QString &msg);
 
 public:
-  explicit Logger(QObject *parent = nullptr);
-   static void writeLog(const QString message,
-                 const QLoggingCategory &log, QtMsgType type = QtInfoMsg);
+    explicit Logger(QObject *parent = nullptr);
+
+    static void writeLog(const QString message,
+                         const QLoggingCategory &log, QtMsgType type = QtInfoMsg);
+
 signals:
 
 public slots:

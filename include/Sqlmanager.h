@@ -3,11 +3,12 @@
 
 #include <QtSql>
 
-class SqlManager
-{
+class SqlManager {
 public:
     SqlManager();
+
     void createAllTables();
+
 private:
     QSqlDatabase db;
     QString db_path = "test_db";
