@@ -11,7 +11,6 @@ find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Sql REQUIRED)
 
 # if build dev than windows will have console on sturtup
-# and schedule template will be copied into build folder
 set(DEV_BUILD TRUE)
 
 add_subdirectory(scheduler)
@@ -28,7 +27,7 @@ set(SOURCES
         ${SOURCES_DIR}/main.cpp
         )
 
-if (WIN32 AND DEV_BUILD)
+if (WIN32 AND NOT ${DEV_BUILD})
     add_executable(${PROJECT_NAME} WIN32 ${HEADERS} ${SOURCES})
 else()
     add_executable(${PROJECT_NAME} ${HEADERS} ${SOURCES})
