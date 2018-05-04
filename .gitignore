@@ -1,1 +1,8 @@
-cmake-build*
+# User-specific stuff
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/dictionaries
+
+# CMake
+cmake-build-debug/
+cmake-build-release/
