@@ -24,13 +24,13 @@ namespace scheduler {
 
         const string &get_cell(schedule_index_t row, schedule_index_t column) const;
 
-        void set_cell(schedule_index_t row, schedule_index_t column, const string& value);
+        void set_cell(schedule_index_t row, schedule_index_t column, const string &value);
 
         const string &get_file_name() const;
 
-        void set_file_name(const string& new_filename);
+        void set_file_name(const string &new_filename);
 
-        void write_as(const string& new_filename);
+        void write_as(const string &new_filename);
 
         void write();
 
