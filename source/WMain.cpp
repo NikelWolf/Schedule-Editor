@@ -1,7 +1,18 @@
 #include "WMain.h"
-#include <WSchedule.h>
 
-WMain::WMain(Scheduler &scheduler, QWidget *parent) : QMainWindow(parent) {
+WMain::WMain(const Scheduler &scheduler, QWidget *parent) : QMainWindow(parent) {
+    this->scheduler = scheduler;
+    wschedule = new WSchedule(scheduler.get_groups(), this);
+
+    createWidgets();
+}
+
+WMain::WMain(QWidget *parent) {
+    wschedule = new WSchedule(16, this);
+    createWidgets();
+}
+
+void WMain::createWidgets(){
     auto *menuBar = new QMenuBar(this);
     QMenu *menu = new QMenu("&Menu", this);
     menu->setTearOffEnabled(true);
@@ -16,6 +27,5 @@ WMain::WMain(Scheduler &scheduler, QWidget *parent) : QMainWindow(parent) {
     setCentralWidget(scroll);
     this->layout()->setMenuBar(menuBar);
 
-    auto *schedule = new WSchedule(scheduler.get_groups(), this);
-    scroll->setWidget(schedule);
+    scroll->setWidget(wschedule);
 }

@@ -3,6 +3,7 @@
 
 #include <QtWidgets>
 #include "scheduler.h"
+
 using namespace scheduler;
 
 const unsigned int h = 71;
@@ -20,20 +21,28 @@ constexpr QSize lesSize[] = {
 class WLesson : public QWidget {
 Q_OBJECT
 private:
-    void createWidgets(int lessonNumber, QStringList &time);
-    std::array<Lesson, 6> lessons;
-
-public:
-    QGridLayout *labelsLayout;
-    QGridLayout *textLayout;
 
     std::array<QLabel *, 5> labels;
     std::array<QTextEdit *, 8> textEdits;
+    std::array<Lesson, 2> lessons;
+
+    QGridLayout *labelsLayout;
+    QGridLayout *textLayout;
+
+    void createWidgets(int lessonNumber, QStringList &time);
+
+public:
+
+    WLesson(int lessonNumber, QStringList &time,
+            std::array<Lesson,2> &lessons, QWidget *parent = nullptr);
 
     WLesson(int lessonNumber, QStringList &time, QWidget *parent = nullptr);
-    WLesson(int lessonNumber, QStringList &time, Lesson lesson[], QWidget *parent = nullptr);
 
     ~WLesson() override;
+
+    QGridLayout *getLabelsLayout();
+
+    QGridLayout *getTextLayout();
 
 signals:
 

@@ -5,32 +5,30 @@ WLesson::WLesson(int lessonNumber, QStringList &time, QWidget *parent) : QWidget
 }
 
 WLesson::WLesson(int lessonNumber, QStringList &time,
-                 Lesson lesson[], QWidget *parent)
+                 std::array<Lesson,2> &lessons, QWidget *parent)
         : QWidget(parent) {
     createWidgets(lessonNumber, time);
 
-    for(unsigned int i=0; i < textEdits.size(); ++i){
-
-    }
     textEdits[0]->setText(QString::fromStdString(
-            lesson[0].get_subject_name()));
+            lessons[0].get_subject_name()));
     textEdits[1]->setText(QString::fromStdString(
-            lesson[1].get_subject_name()));
+            lessons[1].get_subject_name()));
 
+    this->lessons = lessons;
     textEdits[2]->setText(QString::fromStdString(
-            lesson[0].get_lesson_type()));
+            lessons[0].get_lesson_type()));
     textEdits[3]->setText(QString::fromStdString(
-            lesson[1].get_lesson_type()));
+            lessons[1].get_lesson_type()));
 
     textEdits[4]->setText(QString::fromStdString(
-            lesson[0].get_professor()));
+            lessons[0].get_professor()));
     textEdits[5]->setText(QString::fromStdString(
-            lesson[1].get_professor()));
+            lessons[1].get_professor()));
 
     textEdits[6]->setText(QString::fromStdString(
-            lesson[0].get_room()));
+            lessons[0].get_room()));
     textEdits[7]->setText(QString::fromStdString(
-            lesson[1].get_room()));
+            lessons[1].get_room()));
 }
 
 WLesson::~WLesson() {
@@ -101,4 +99,12 @@ void WLesson::createWidgets(int lessonNumber, QStringList &time) {
     textLayout->setSpacing(1);
     textLayout->setMargin(1);
 
+}
+
+QGridLayout *WLesson::getLabelsLayout() {
+    return labelsLayout;
+}
+
+QGridLayout *WLesson::getTextLayout() {
+    return textLayout;
 }

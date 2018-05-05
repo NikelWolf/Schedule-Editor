@@ -13,7 +13,5 @@ int main(int argc, char *argv[]) {
     WMain wmain(scheduler);
     wmain.show();
 
-    std::cout << scheduler.get_groups().at(0).get_group_magic_number() << endl;
-
-    return app.exec();
+    return QApplication::exec();
 }
