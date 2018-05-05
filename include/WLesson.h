@@ -31,7 +31,7 @@ public:
     std::array<QTextEdit *, 8> textEdits;
 
     WLesson(int lessonNumber, QStringList &time, QWidget *parent = nullptr);
-    WLesson(int lessonNumber, QStringList &time, Lesson lesson, QWidget *parent = nullptr);
+    WLesson(int lessonNumber, QStringList &time, Lesson lesson[], QWidget *parent = nullptr);
 
     ~WLesson() override;
 

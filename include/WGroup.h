@@ -27,7 +27,7 @@ private:
     std::array<WDay *, 6> wdays;
     std::array<QLabel *, 10> wlabels;
     std::array<QLineEdit *, 3> wlineEdits;
-    std::array<std::array<Lesson, 6>, 6> lessons;
+    std::array<std::array<Lesson, 12>, 6> lessons;
 
     GroupSchedule group;
 

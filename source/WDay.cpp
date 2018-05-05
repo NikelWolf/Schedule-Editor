@@ -7,9 +7,10 @@ WDay::WDay(const QString &dayOfWeek, QWidget *parent) : QWidget(parent) {
     createWidgets(dayOfWeek);
 }
 
-WDay::WDay(const QString &dayOfWeek, std::array<Lesson, 6> lessons, QWidget *parent) : QWidget(parent) {
-    for (int column = 0, i = 0; i < 6; column = 0, ++i) {
-        wlessons[i] = new WLesson(i + 1, timeOfLesson[i], lessons[i], this);
+WDay::WDay(const QString &dayOfWeek, std::array<Lesson, 12> lessons, QWidget *parent) : QWidget(parent) {
+    for (unsigned int i = 0, j = 0; i < 6; ++i, j += 2) {
+        Lesson tmp[] = {lessons[j], lessons[j + 1]}; //todo
+        wlessons[i] = new WLesson(i + 1, timeOfLesson[i], tmp, this);
     }
     createWidgets(dayOfWeek);
 

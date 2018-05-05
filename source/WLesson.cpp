@@ -1,11 +1,36 @@
 #include "WLesson.h"
+
 WLesson::WLesson(int lessonNumber, QStringList &time, QWidget *parent) : QWidget(parent) {
     createWidgets(lessonNumber, time);
 }
 
-WLesson::WLesson(int lessonNumber, QStringList &time, Lesson lesson, QWidget *parent) : QWidget(parent) {
+WLesson::WLesson(int lessonNumber, QStringList &time,
+                 Lesson lesson[], QWidget *parent)
+        : QWidget(parent) {
     createWidgets(lessonNumber, time);
-    lesson.get_subject_name();
+
+    for(unsigned int i=0; i < textEdits.size(); ++i){
+
+    }
+    textEdits[0]->setText(QString::fromStdString(
+            lesson[0].get_subject_name()));
+    textEdits[1]->setText(QString::fromStdString(
+            lesson[1].get_subject_name()));
+
+    textEdits[2]->setText(QString::fromStdString(
+            lesson[0].get_lesson_type()));
+    textEdits[3]->setText(QString::fromStdString(
+            lesson[1].get_lesson_type()));
+
+    textEdits[4]->setText(QString::fromStdString(
+            lesson[0].get_professor()));
+    textEdits[5]->setText(QString::fromStdString(
+            lesson[1].get_professor()));
+
+    textEdits[6]->setText(QString::fromStdString(
+            lesson[0].get_room()));
+    textEdits[7]->setText(QString::fromStdString(
+            lesson[1].get_room()));
 }
 
 WLesson::~WLesson() {

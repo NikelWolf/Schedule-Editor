@@ -20,7 +20,7 @@ public:
     std::array<WLesson *, 6> wlessons;
 
     explicit WDay( const QString &dayOfWeek, QWidget *parent = nullptr);
-    WDay(const QString &dayOfWeek, std::array<Lesson, 6> lessons, QWidget *parent);
+    WDay(const QString &dayOfWeek, std::array<Lesson, 12> lessons, QWidget *parent);
     ~WDay() override = default;
 
     void createWidgets(const QString &dayOfWeek);

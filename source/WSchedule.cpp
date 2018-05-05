@@ -21,8 +21,6 @@ void WSchedule::createWidgets(unsigned long groupsCount) {
     for (int i = 0; i < groupsCount; ++i) {
         box->addWidget(wgroups[i]);
     }
-
-    this->setStyleSheet("background-color: green");
 }
 
 
