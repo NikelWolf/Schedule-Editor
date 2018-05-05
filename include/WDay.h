@@ -6,8 +6,7 @@
 
 class WDay : public QWidget {
 Q_OBJECT
-public:
-
+private:
     QVector<QStringList> timeOfLesson = {
             {" 9-00", "10-30"},
             {"10-40", "12-10"},
@@ -16,14 +15,21 @@ public:
             {"16-20", "17-50"},
             {"18-00", "19-30"},
     };
+
     QLabel *wdayOfWeek;
     std::array<WLesson *, 6> wlessons;
 
-    explicit WDay( const QString &dayOfWeek, QWidget *parent = nullptr);
-    WDay(const QString &dayOfWeek, std::array<Lesson, 12> lessons, QWidget *parent);
+    void createWidgets(const QString &dayOfWeek);
+
+public:
+
+    explicit WDay(const QString &dayOfWeek, QWidget *parent = nullptr);
+
+    WDay(const QString &dayOfWeek,
+         std::array<Lesson, 12> lessons, QWidget *parent);
+
     ~WDay() override = default;
 
-    void createWidgets(const QString &dayOfWeek);
 
 signals:
 

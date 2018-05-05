@@ -1,7 +1,6 @@
 #ifndef WGROUP_H
 #define WGROUP_H
 
-#include <QtWidgets>
 #include <WDay.h>
 
 static const QSize hedSize[] = { //todo wgroup size
@@ -24,12 +23,6 @@ static const QSize hedSize[] = { //todo wgroup size
 class WGroup : public QWidget {
 Q_OBJECT
 private:
-    std::array<WDay *, 6> wdays;
-    std::array<QLabel *, 10> wlabels;
-    std::array<QLineEdit *, 3> wlineEdits;
-    std::array<std::array<Lesson, 12>, 6> lessons;
-
-    GroupSchedule group;
 
     QStringList headerLabels = {
             {"День недели"},
@@ -52,12 +45,20 @@ private:
             {"Пт"},
             {"Сб"}
     };
+    std::array<WDay *, 6> wdays;
+    std::array<QLabel *, 10> wlabels;
+    std::array<QLineEdit *, 3> wlineEdits;
+    std::array<std::array<Lesson, 12>, 6> lessons;
+
+    GroupSchedule group;
+
+    void createWidgets();
 
 public:
-     explicit WGroup(QWidget *parent = nullptr);
-    WGroup(const GroupSchedule &group, QWidget *parent) ;
+    explicit WGroup(QWidget *parent = nullptr);
 
-        void createWidgets();
+    WGroup(const GroupSchedule &group, QWidget *parent);
+
 signals:
 
 public slots:

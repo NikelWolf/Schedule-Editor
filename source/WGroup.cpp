@@ -1,12 +1,4 @@
 #include "WGroup.h"
-#include <QtWidgets>
-
-WGroup::WGroup(QWidget *parent) : QWidget(parent) {
-    for (unsigned int i = 0; i < wdays.size(); ++i) {
-        wdays[i] = new WDay(week[i], this);
-    }
-    createWidgets();
-}
 
 WGroup::WGroup(const GroupSchedule &group, QWidget *parent) : QWidget(parent) {
     this->group = group;
@@ -16,20 +8,26 @@ WGroup::WGroup(const GroupSchedule &group, QWidget *parent) : QWidget(parent) {
         for (int j = 0; j < 12; ++j) {
             lessons[i][j] = group.get_lesson(1, i + 1, k);
             //parity day number
-            lessons[i][++j] = group.get_lesson(2, i + 1,  k);
-
+            lessons[i][++j] = group.get_lesson(2, i + 1, k);
             ++k;
-            //
         }
         wdays[i] = new WDay(week[i], lessons[i], this);
     }
     createWidgets();
-  QString str = QString::fromStdString(group.get_group_name());
-  wlineEdits[0]->setText(str);
-  str = QString::fromStdString(group.get_group_faculty());
-  wlineEdits[1]->setText(str);
-  str = QString::fromStdString(group.get_group_magic_number());
-  wlineEdits[2]->setText(str);
+    QString str = QString::fromStdString(group.get_group_name());
+    wlineEdits[0]->setText(str);
+    str = QString::fromStdString(group.get_group_faculty());
+    wlineEdits[1]->setText(str);
+    str = QString::fromStdString(group.get_group_magic_number());
+    wlineEdits[2]->setText(str);
+}
+
+
+WGroup::WGroup(QWidget *parent) : QWidget(parent) {
+    for (unsigned int i = 0; i < wdays.size(); ++i) {
+        wdays[i] = new WDay(week[i], this);
+    }
+    createWidgets();
 }
 
 void WGroup::createWidgets() {
