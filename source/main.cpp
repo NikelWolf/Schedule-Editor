@@ -5,7 +5,7 @@
 using namespace scheduler;
 
 int main(int argc, char *argv[]) {
-    Scheduler scheduler("/home/nick/Projects/orig.xlsx");
+    Scheduler scheduler("resources/MIREA_IT_1_2.xlsx");
 
     QApplication app(argc, argv);
     //Logger logger; //todo repair logger

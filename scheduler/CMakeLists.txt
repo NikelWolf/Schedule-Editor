@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.9 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.11 FATAL_ERROR)
 project(scheduler_api VERSION 1.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 14)
@@ -6,6 +6,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Library type
 option(STATIC "Set to ON to build scheduler as a static library instead of a shared library" OFF)
+
+if (APPLE)
+    message(FATAL_ERROR "OSX can not built on OX yet")
+endif()
 
 # Commonly used project directories
 set(SCHEDULER_ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR})
@@ -91,25 +95,25 @@ endif ()
 configure_file(${SCHEDULER_RESOURCES_DIR}/schedule_default_template.xlsx
         ${CMAKE_BINARY_DIR}/jstf.dat COPYONLY)
 
-if (CMAKE_BUILD_TYPE MATCHES "Debug")
-    set(DEBUG_SYMBOL "d")
-endif ()
+if (NOT STATIC)
+    if (${CMAKE_BUILD_TYPE} MATCHES "Debug")
+        set(DEBUG_SYMBOL "d")
+    endif ()
 
-if (WIN32)
-    set(shared_libs
-            ${CMAKE_CURRENT_BINARY_DIR}/third-party/xlnt/source/libxlnt${DEBUG_SYMBOL}.dll
-            ${CMAKE_CURRENT_BINARY_DIR}/libscheduler${DEBUG_SYMBOL}.dll)
-elseif (UNIX AND NOT APPLE)
-    set(XLNT_VERSION 1.2)
+    if (WIN32)
+        set(shared_libs
+                ${CMAKE_CURRENT_BINARY_DIR}/third-party/xlnt/source/libxlnt${DEBUG_SYMBOL}.dll
+                ${CMAKE_CURRENT_BINARY_DIR}/libscheduler${DEBUG_SYMBOL}.dll)
+    elseif (UNIX AND NOT APPLE)
+        set(XLNT_VERSION 1.2)
 
-    set(shared_libs
-            ${CMAKE_CURRENT_BINARY_DIR}/third-party/xlnt/source/libxlnt${DEBUG_SYMBOL}.so.${XLNT_VERSION}
-            ${CMAKE_CURRENT_BINARY_DIR}/third-party/xlnt/source/libxlnt${DEBUG_SYMBOL}.so
-            ${CMAKE_CURRENT_BINARY_DIR}/libscheduler${DEBUG_SYMBOL}.so.${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
-            ${CMAKE_CURRENT_BINARY_DIR}/libscheduler${DEBUG_SYMBOL}.so)
-else ()
-    message(FATAL_ERROR "can not build on OSX yet")
-endif ()
+        set(shared_libs
+                ${CMAKE_CURRENT_BINARY_DIR}/third-party/xlnt/source/libxlnt${DEBUG_SYMBOL}.so.${XLNT_VERSION}
+                ${CMAKE_CURRENT_BINARY_DIR}/third-party/xlnt/source/libxlnt${DEBUG_SYMBOL}.so
+                ${CMAKE_CURRENT_BINARY_DIR}/libscheduler${DEBUG_SYMBOL}.so.${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
+                ${CMAKE_CURRENT_BINARY_DIR}/libscheduler${DEBUG_SYMBOL}.so)
+    endif ()
 
-add_custom_command(TARGET ${LIBRARY_NAME} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy ${shared_libs} ${CMAKE_BINARY_DIR})
+    add_custom_command(TARGET ${LIBRARY_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy ${shared_libs} ${CMAKE_BINARY_DIR})
+endif()
