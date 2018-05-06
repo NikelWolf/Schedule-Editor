@@ -30,6 +30,7 @@ public:
 
     ~WDay() override = default;
 
+    void saveDay();
 
 signals:
 

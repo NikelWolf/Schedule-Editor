@@ -4,14 +4,14 @@ WGroup::WGroup(const GroupSchedule &group, QWidget *parent) : QWidget(parent) {
     this->group = group;
     for (unsigned int i = 0; i < wdays.size(); ++i) {
 
+        std::array<Lesson, 12> lessons;
         int k = 1;
         for (int j = 0; j < 12; ++j) {
-            lessons[i][j] = group.get_lesson(1, i + 1, k);
-            //parity day number
-            lessons[i][++j] = group.get_lesson(2, i + 1, k);
+            lessons[j] = group.get_lesson(1, i + 1, k); //parity, day, number
+            lessons[++j] = group.get_lesson(2, i + 1, k);
             ++k;
         }
-        wdays[i] = new WDay(week[i], lessons[i], this);
+        wdays[i] = new WDay(week[i], lessons, this);
     }
     createWidgets();
     QString str = QString::fromStdString(group.get_group_name());
@@ -72,4 +72,18 @@ void WGroup::createWidgets() {
     for (i = 0; i < wdays.size(); ++i) {
         groupLayout->addWidget(wdays[i]);
     }
+}
+
+void WGroup::saveGroup() {
+    for (WDay *wd: wdays) {
+        wd->saveDay();
+    }
+    string str = wlineEdits[0]->text().toStdString();
+    group.set_group_name(str);
+
+    str = wlineEdits[1]->text().toStdString();
+    group.set_group_faculty(str);
+
+    str = wlineEdits[2]->text().toStdString();
+    group.set_group_magic_number(str);
 }

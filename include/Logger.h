@@ -29,7 +29,7 @@ private:
 public:
     explicit Logger(QObject *parent = nullptr);
 
-    static void writeLog(const QString message,
+    void writeLog(const QString &message,
                          const QLoggingCategory &log, QtMsgType type = QtInfoMsg);
 
 signals:

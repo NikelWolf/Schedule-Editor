@@ -1,11 +1,7 @@
 #include "WLesson.h"
 
-WLesson::WLesson(int lessonNumber, QStringList &time, QWidget *parent) : QWidget(parent) {
-    createWidgets(lessonNumber, time);
-}
-
 WLesson::WLesson(int lessonNumber, QStringList &time,
-                 std::array<Lesson,2> &lessons, QWidget *parent)
+                 std::array<Lesson, 2> &lessons, QWidget *parent)
         : QWidget(parent) {
     createWidgets(lessonNumber, time);
 
@@ -31,10 +27,8 @@ WLesson::WLesson(int lessonNumber, QStringList &time,
             lessons[1].get_room()));
 }
 
-WLesson::~WLesson() {
-    //delete labelsLayout;
-    //delete textLayout;
-    //todo check memory with valgrind
+WLesson::WLesson(int lessonNumber, QStringList &time, QWidget *parent) : QWidget(parent) {
+    createWidgets(lessonNumber, time);
 }
 
 void WLesson::createWidgets(int lessonNumber, QStringList &time) {
@@ -75,7 +69,7 @@ void WLesson::createWidgets(int lessonNumber, QStringList &time) {
         textEdits[i]->setLineWrapMode(QTextEdit::NoWrap);
         textEdits[i]->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
         textEdits[i]->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-        textEdits[i]->setFontPointSize(10);
+        textEdits[i]->setFontPointSize(8);
     }
 
     unsigned int k = 0;
@@ -98,7 +92,24 @@ void WLesson::createWidgets(int lessonNumber, QStringList &time) {
     labelsLayout->setMargin(1);
     textLayout->setSpacing(1);
     textLayout->setMargin(1);
+    //logger.writeLog("LessonWidget created", gui());
+}
 
+void WLesson::saveLesson() {
+    string str;
+    for (int i = -1, k=0; i < 4; ++k) {
+        str = textEdits[++i]->toPlainText().toStdString();
+        lessons[k].set_subject_name(str);
+
+        str = textEdits[++i]->toPlainText().toStdString();
+        lessons[k].set_lesson_type(str);
+
+        str = textEdits[++i]->toPlainText().toStdString();
+        lessons[k].set_professor(str);
+
+        str = textEdits[++i]->toPlainText().toStdString();
+        lessons[k].set_room(str);
+    }
 }
 
 QGridLayout *WLesson::getLabelsLayout() {

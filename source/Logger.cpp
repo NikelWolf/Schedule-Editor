@@ -12,35 +12,14 @@ QScopedPointer<QFile>  Logger::logFile;
 
 Logger::Logger(QObject *parent) : QObject(parent) {
     qInstallMessageHandler(messageHandler);
-    if (!QFile::exists("log.txt")) {
-        logFile.reset(new QFile("log.txt"));
+    if (!QFile::exists("resources/log.txt")) {
+        logFile.reset(new QFile("resources/log.txt"));
     }
     logFile.data()->open(QFile::Append | QFile::Text);
     writeLog("Start logging", log(), QtInfoMsg);
 }
 
-void Logger::messageHandler(QtMsgType type,
-                            const QMessageLogContext &context,
-                            const QString &message) {
-    QTextStream out(logFile.data());
-    out << QDateTime::currentDateTime().toString("[yyyy-MM-dd hh:mm:ss.zzz]");
-
-    out << "[";
-    if (type == QtFatalMsg)
-        out << "FATAL";
-    else out << context.category;
-    out << "] " << message << endl;
-
-#ifdef QT_DEBUG
-    out << "\t\t" <<
-        context.file << ":" <<
-        context.function << ":" <<
-        context.line << ":" << endl;
-#endif
-    out.flush();
-}
-
-void Logger::writeLog(const QString message,
+void Logger::writeLog(const QString &message,
                       const QLoggingCategory &log, QtMsgType type/*=QtInfoMsg*/) {
     switch (type) {
         case QtInfoMsg:
@@ -58,6 +37,25 @@ void Logger::writeLog(const QString message,
         case QtFatalMsg:
             QLoggingCategory lg("fatal", QtFatalMsg);
             qFatal(" ___Ну все, приехали. Зовите фиксиков___");
-            abort();
     }
+}
+
+void Logger::messageHandler(QtMsgType type,
+                            const QMessageLogContext &context,
+                            const QString &message) {
+    QTextStream out(logFile.data());
+    out << QDateTime::currentDateTime().toString("[yyyy-MM-dd hh:mm:ss.zzz]");
+    out << "[";
+    if (type == QtFatalMsg)
+        out << "FATAL";
+    else out << context.category;
+    out << "] " << message << endl;
+
+#ifdef QT_DEBUG
+    out << "\t\t" <<
+        context.file << ":" <<
+        context.function << ":" <<
+        context.line << ":" << endl;
+#endif
+    out.flush();
 }
