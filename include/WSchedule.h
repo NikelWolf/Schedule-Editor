@@ -6,14 +6,14 @@
 class WSchedule : public QWidget {
 Q_OBJECT
 private:
-    std::vector<WGroup *> wgroups;
+    vector<WGroup *> wgroups;
 
+    vector<GroupSchedule> &groupsVector;
+private:
     void createWidgets();
 
 public:
-    explicit WSchedule(const std::vector<GroupSchedule> &groupsVector, QWidget *parent);
-
-    explicit WSchedule(unsigned long groupsCount = 16, QWidget *parent = nullptr);
+    explicit WSchedule(vector<GroupSchedule> &groupsVector, QWidget *parent);
 
     void saveSchedule();
 

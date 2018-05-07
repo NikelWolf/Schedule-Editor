@@ -1,16 +1,13 @@
 #include "WSchedule.h"
 
-WSchedule::WSchedule(const std::vector<GroupSchedule> &groupsVector, QWidget *parent) {
+WSchedule::WSchedule(vector<GroupSchedule> &groupsVector_, QWidget *parent)
+        : QWidget(parent), groupsVector(groupsVector_) {
+    qDebug()<<"groups push start";
     for (auto &group : groupsVector) {
         wgroups.push_back(new WGroup(group, this));
     }
-    createWidgets();
-}
+    qDebug()<<"groups pushed";
 
-WSchedule::WSchedule(unsigned long groupsCount, QWidget *parent) : QWidget(parent) {
-    for (unsigned long i = 0; i < groupsCount; ++i) {
-        wgroups.push_back(new WGroup(this));
-    }
     createWidgets();
 }
 

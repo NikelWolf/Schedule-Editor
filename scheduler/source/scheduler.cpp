@@ -41,7 +41,7 @@ namespace scheduler {
 
     const GroupSchedule &Scheduler::get_group(const string &group_name) const {
         if (!GroupSchedule::is_group_name_valid(group_name)) {
-            throw ScheduleError{"group name '" + group_name + "' is invalid"};
+            throw ScheduleError{"groupScheduleRef name '" + group_name + "' is invalid"};
         }
 
         for (const GroupSchedule &gs: _groups) {
@@ -50,7 +50,7 @@ namespace scheduler {
             }
         }
 
-        throw ScheduleError{"group '" + group_name + "' is not in schedule"};
+        throw ScheduleError{"groupScheduleRef '" + group_name + "' is not in schedule"};
     }
 
     void Scheduler::add_group(const GroupSchedule &gs) {
@@ -69,7 +69,7 @@ namespace scheduler {
         if (is_group_in_schedule(group_name)) {
             _groups.erase(_groups.begin() + _get_group_index(group_name));
         } else {
-            throw ScheduleError{"group '" + group_name + "' is not in schedule"};
+            throw ScheduleError{"groupScheduleRef '" + group_name + "' is not in schedule"};
         }
     }
 
@@ -141,7 +141,7 @@ namespace scheduler {
             }
         }
 
-        throw ScheduleError{"wrong format for schedule: there is no row with group names"};
+        throw ScheduleError{"wrong format for schedule: there is no row with groupScheduleRef names"};
     }
 
     int Scheduler::_get_group_index(const string &group_name) const {

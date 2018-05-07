@@ -13,7 +13,7 @@
 
 /* Doesn't check:
 
- that ,| are not mixed in a model group
+ that ,| are not mixed in a model groupScheduleRef
  content of literals
 
 */

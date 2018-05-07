@@ -1,7 +1,8 @@
 #ifndef WGROUP_H
 #define WGROUP_H
 
-#include <WDay.h>
+#include <WLesson.h>
+
 
 static const QSize hedSize[] = { //todo wgroup size
         {30,  h},
@@ -45,24 +46,32 @@ private:
             {"Пт"},
             {"Сб"}
     };
-    std::array<WDay *, 6> wdays;
-    std::array<QLabel *, 10> wlabels;
-    std::array<QLineEdit *, 3> wlineEdits;
 
-    GroupSchedule group;
+    QVector<QStringList> lessonsTimeList = {
+            {" 9-00", "10-30"},
+            {"10-40", "12-10"},
+            {"13-00", "14-30"},
+            {"14-40", "16-10"},
+            {"16-20", "17-50"},
+            {"18-00", "19-30"},
+    };
 
+    QVBoxLayout *groupVerLayout;
+
+    array<QLabel *, 10> wlabels;
+    array<QLineEdit *, 3> wlineEdits;
+    vector<WLesson *> wlessons;
+
+    reference_wrapper<GroupSchedule> groupScheduleRef;
+
+private:
     void createWidgets();
 
 public:
-    explicit WGroup(QWidget *parent = nullptr);
-
-    WGroup(const GroupSchedule &group, QWidget *parent);
+    WGroup(GroupSchedule &groupSchedule, QWidget *parent);
 
     void saveGroup();
 
-    signals:
-
-public slots:
 };
 
 #endif // WGROUP_H
