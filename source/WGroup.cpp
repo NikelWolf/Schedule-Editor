@@ -103,22 +103,22 @@ void WGroup::saveGroup() { //todo save groupScheduleRef
     groupScheduleRef.get().set_group_magic_number(str);
 
     for (int k = 0; k < 36; ++k) {
-            for (int parity = 0; parity < 2; ++parity) {
-                //todo indexs
-                Lesson &lesson = const_cast<Lesson &>(groupScheduleRef.get().get_lesson(parity, k / 6, k % 6));
-                lesson.set_subject_name(
-                        wlessons[k]->getSubject(parity).toStdString()
-                        );
-                lesson.set_lesson_type(
-                        wlessons[k]->getType(parity).toStdString()
-                );
-                lesson.set_professor(
-                        wlessons[k]->getProffesor(parity).toStdString()
-                );
-                lesson.set_room(
-                        wlessons[k]->getRoom(parity).toStdString()
-                );
-                groupScheduleRef.get().set_lesson(parity, k%/6, 1, lesson);
-            }
+        for (int parity = 0; parity < 2; ++parity) {
+            //todo indexs
+            Lesson &lesson = const_cast<Lesson &>(groupScheduleRef.get().get_lesson(parity, k / 6, k % 6));
+            lesson.set_subject_name(
+                    wlessons[k]->getSubject(parity).toStdString()
+            );
+            lesson.set_lesson_type(
+                    wlessons[k]->getType(parity).toStdString()
+            );
+            lesson.set_professor(
+                    wlessons[k]->getProffesor(parity).toStdString()
+            );
+            lesson.set_room(
+                    wlessons[k]->getRoom(parity).toStdString()
+            );
+            groupScheduleRef.get().set_lesson(parity, k % 6, 1, lesson);
         }
-    }}
+    }
+}
