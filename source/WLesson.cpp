@@ -1,34 +1,11 @@
 #include "WLesson.h"
 
-WLesson::WLesson(int lessonNumber, QStringList &time,
-                 std::array<Lesson, 2> &lessons, QWidget *parent)
-        : QWidget(parent) {
+
+WLesson::WLesson(int lessonNumber, QStringList &time, QWidget *parent)
+        : QWidget(parent){
     createWidgets(lessonNumber, time);
 
-    textEdits[0]->setText(QString::fromStdString(
-            lessons[0].get_subject_name()));
-    textEdits[1]->setText(QString::fromStdString(
-            lessons[1].get_subject_name()));
 
-    this->lessons = lessons;
-    textEdits[2]->setText(QString::fromStdString(
-            lessons[0].get_lesson_type()));
-    textEdits[3]->setText(QString::fromStdString(
-            lessons[1].get_lesson_type()));
-
-    textEdits[4]->setText(QString::fromStdString(
-            lessons[0].get_professor()));
-    textEdits[5]->setText(QString::fromStdString(
-            lessons[1].get_professor()));
-
-    textEdits[6]->setText(QString::fromStdString(
-            lessons[0].get_room()));
-    textEdits[7]->setText(QString::fromStdString(
-            lessons[1].get_room()));
-}
-
-WLesson::WLesson(int lessonNumber, QStringList &time, QWidget *parent) : QWidget(parent) {
-    createWidgets(lessonNumber, time);
 }
 
 void WLesson::createWidgets(int lessonNumber, QStringList &time) {
@@ -88,34 +65,47 @@ void WLesson::createWidgets(int lessonNumber, QStringList &time) {
         textEdits[i + 1]->setFixedSize(lesSize[k]);
     }
 
+    auto hboxl = new QHBoxLayout(this);
+
     labelsLayout->setSpacing(1);
-    labelsLayout->setMargin(1);
     textLayout->setSpacing(1);
-    textLayout->setMargin(1);
-    //logger.writeLog("LessonWidget created", gui());
+    hboxl->setSpacing(1);
+
+    hboxl->addLayout(labelsLayout);
+    hboxl->addLayout(textLayout);
 }
 
-void WLesson::saveLesson() {
-    string str;
-    for (int i = -1, k=0; i < 4; ++k) {
-        str = textEdits[++i]->toPlainText().toStdString();
-        lessons[k].set_subject_name(str);
-
-        str = textEdits[++i]->toPlainText().toStdString();
-        lessons[k].set_lesson_type(str);
-
-        str = textEdits[++i]->toPlainText().toStdString();
-        lessons[k].set_professor(str);
-
-        str = textEdits[++i]->toPlainText().toStdString();
-        lessons[k].set_room(str);
-    }
+void WLesson::setSubject(int parity, QString name) {
+    textEdits[parity]->setText(name);
 }
 
-QGridLayout *WLesson::getLabelsLayout() {
-    return labelsLayout;
+void WLesson::setType(int parity, QString name) {
+    textEdits[2 + parity]->setText(name);
+
 }
 
-QGridLayout *WLesson::getTextLayout() {
-    return textLayout;
+void WLesson::setProffesor(int parity, QString name) {
+    textEdits[4 + parity]->setText(name);
+
+}
+
+void WLesson::setRoom(int parity, QString name) {
+    textEdits[6 + parity]->setText(name);
+}
+
+QString WLesson::getType(int parity) {
+    return textEdits[parity]->toPlainText();
+}
+
+QString WLesson::getProffesor(int parity) {
+    return textEdits[2 + parity]->toPlainText();
+}
+
+QString WLesson::getRoom(int parity) {
+    return textEdits[4 + parity]->toPlainText();
+}
+
+QString WLesson::getSubject(int parity) {
+    return textEdits[6 + parity]->toPlainText();
+
 }

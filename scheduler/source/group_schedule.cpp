@@ -24,7 +24,7 @@ namespace scheduler {
     void GroupSchedule::set_group_name(const string &group_name) {
         if (!is_group_name_valid(group_name))
             throw ScheduleError{
-                    "group name '" + group_name + "' is wrong, template is 'LLLL-DD-DD'(L - letter, D - digit)"};
+                    "groupScheduleRef name '" + group_name + "' is wrong, template is 'LLLL-DD-DD'(L - letter, D - digit)"};
 
         _group_name = group_name;
     }
@@ -65,7 +65,7 @@ namespace scheduler {
         }
     }
 
-    // create json-like string representation of group
+    // create json-like string representation of groupScheduleRef
     string GroupSchedule::to_string() const {
         string result = "GroupSchedule for '" + _group_name + "' on '" + _group_faculty + "' faculty with '" +
                         _group_magic_number + "' magic number: {\n\t";

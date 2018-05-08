@@ -1,14 +1,10 @@
 #include "WMain.h"
 
-//WMain::WMain(const Scheduler &scheduler, QWidget *parent) : QMainWindow(parent) {
-//    this->scheduler = scheduler;
-//    wschedule = new WSchedule(scheduler.get_groups(), this);
-//
-//    createWidgets();
-//}
+WMain::WMain(const Scheduler &scheduler, QWidget *parent) : QMainWindow(parent) {
+    this->scheduler = scheduler;
+    wschedule = new WSchedule(const_cast<vector<GroupSchedule> &>(scheduler.get_groups()), this);
 
-WMain::WMain(QWidget *parent) {
-    wschedule = new WSchedule(16, this);
+
     createWidgets();
 }
 
@@ -28,11 +24,12 @@ void WMain::createWidgets() {
     this->layout()->setMenuBar(menuBar);
 
     scroll->setWidget(wschedule);
+    scroll->update();
 }
 
 void WMain::openFile() {
-    Scheduler scheduler("resources/MIREA_IT_1_2.xlsx");
-    wschedule = new WSchedule(scheduler.get_groups(), this);
+    Scheduler scheduler("resources/schedule_template.xlsx");
+    wschedule = new WSchedule(const_cast<vector<GroupSchedule> &>(scheduler.get_groups()), this);
     scroll->setWidget(wschedule);
     scroll->update();
     qDebug() << "opened";
@@ -40,5 +37,7 @@ void WMain::openFile() {
 
 void WMain::saveFile() { //todo
     wschedule->saveSchedule();
+    cout<< "тест1: "<< scheduler.get_group("ИАБО-01-17").get_group_faculty();
     scheduler.save_schedule();
+    cout<< "тест2: "<< scheduler.get_group("ИАБО-01-17").get_group_faculty();
 };

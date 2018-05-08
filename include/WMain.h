@@ -14,15 +14,11 @@ private:
 
     QScrollArea *scroll;
 
-private:
-
     void createWidgets();
 
 public:
 
-    //explicit WMain(const Scheduler &scheduler, QWidget *parent = nullptr);
-
-    explicit WMain(QWidget *parent = nullptr);
+explicit WMain(const Scheduler &scheduler, QWidget *parent = nullptr);
 
 signals:
 

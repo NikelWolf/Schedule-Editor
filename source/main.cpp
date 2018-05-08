@@ -3,10 +3,11 @@
 
 int main(int argc, char *argv[]) {
 
-
     QApplication app(argc, argv);
 
-    WMain wMain;
+    Scheduler scheduler("resources/schedule_template.xlsx");
+
+    WMain wMain(scheduler);
     wMain.show();
 
     return QApplication::exec();
