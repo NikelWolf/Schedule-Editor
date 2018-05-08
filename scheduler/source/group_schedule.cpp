@@ -121,4 +121,8 @@ namespace scheduler {
             throw ScheduleError{
                     "wrong lesson number: " + std::to_string(lesson) + ", supported values are from 1 to 6"};
     }
+
+    Lesson &GroupSchedule::get_lesson_non_const_ref(int parity, int day, int lesson_number) const {
+        return const_cast<Lesson &>(get_lesson(parity, day, lesson_number));
+    }
 }

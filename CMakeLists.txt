@@ -10,6 +10,8 @@ find_package(Qt5Gui REQUIRED)
 find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Sql REQUIRED)
 
+#build and link scheduler and xlnt as static libraries
+set(STATIC ON CACHE BOOL "Set to ON to build scheduler as a shared library instead of a static library" FORCE)
 add_subdirectory(scheduler)
 set(SCHEDULER_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/schdeuler/include)
 
@@ -21,6 +23,7 @@ file(GLOB HEADERS ${HEADERS_DIR}/*.h)
 file(GLOB SOURCES ${SOURCES_DIR}/*.cpp)
 
 if (WIN32 AND NOT ${CMAKE_BUILD_TYPE} MATCHES "Debug")
+    set(CMAKE_EXE_LINKER_FLAGS -static)
     add_executable(${PROJECT_NAME} WIN32 ${HEADERS} ${SOURCES})
 else ()
     add_executable(${PROJECT_NAME} ${HEADERS} ${SOURCES})

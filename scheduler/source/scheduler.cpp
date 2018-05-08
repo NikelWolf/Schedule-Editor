@@ -1,12 +1,13 @@
 #include "common.h"
 
 namespace scheduler {
-    const string Scheduler::_default_schedule_template_file{"jstf.dat"};
+    const string Scheduler::_default_schedule_template_filename{"jstf.dat"};
     const string Scheduler::_default_schedule_filename{"schedule.xlsx"};
     const uint8_t Scheduler::_max_groups_count = 36;
 
-    Scheduler::Scheduler() : _schedule{_default_schedule_template_file} {
+    Scheduler::Scheduler() : _schedule{_default_schedule_template_filename} {
         _schedule.set_file_name(_default_schedule_filename);
+        _fill_schedule_start_position();
     }
 
     Scheduler::Scheduler(const string &file_name) : _schedule{file_name} {
@@ -19,6 +20,18 @@ namespace scheduler {
 
     void Scheduler::set_schedule_filename(const string &filename) {
         _schedule.set_file_name(filename);
+    }
+
+    void Scheduler::open_new_schedule(const string &filename) {
+        _clear_attributes();
+        _schedule.load_new_file(filename);
+        _parse_schedule();
+    }
+
+    void Scheduler::create_new_empty_schedule(const string &filename) {
+        _clear_attributes();
+        _schedule.load_new_file(_default_schedule_template_filename);
+        set_schedule_filename(filename);
     }
 
     bool Scheduler::is_group_in_schedule(const string &group_name) const {
@@ -113,6 +126,13 @@ namespace scheduler {
         _schedule.write();
     }
 
+    void Scheduler::save_schedule_as(const string &filename) {
+        string old_name = _schedule.get_file_name();
+        set_schedule_filename(filename);
+        save_schedule();
+        set_schedule_filename(old_name);
+    }
+
     string Scheduler::to_string() const {
         string result = "schedule filename: \"" + _schedule.get_file_name() + "\"" +
                         "\nmetainfo:" +
@@ -133,8 +153,8 @@ namespace scheduler {
     }
 
     schedule_index_t Scheduler::_get_group_name_row() const {
-        for (schedule_index_t row = 0; row < _schedule.get_max_row_index(); row++) {
-            for (schedule_index_t column = 0; column < _schedule.get_max_column_index(); column++) {
+        for (schedule_index_t row = _schedule_start_row; row < _schedule.get_max_row_index(); row++) {
+            for (schedule_index_t column = _schedule_start_col; column < _schedule.get_max_column_index(); column++) {
                 if (GroupSchedule::is_group_name_valid(_schedule.get_cell(row, column))) {
                     return row;
                 }
@@ -142,6 +162,34 @@ namespace scheduler {
         }
 
         throw ScheduleError{"wrong format for schedule: there is no row with group names"};
+    }
+
+    void Scheduler::_fill_schedule_start_position() {
+        for (schedule_index_t row = 0; row < _schedule.get_max_row_index(); row++) {
+            for (schedule_index_t column = 0; column < _schedule.get_max_column_index(); column++) {
+                if (_schedule.get_cell(row, column) == "День недели") {
+                    if (row == 0) {
+                        throw ScheduleError{"schedule has wrong format: not enough rows to insert metainfo"};
+                    }
+
+                    _schedule_start_row = row;
+                    _schedule_start_col = column;
+                    return;
+                }
+            }
+        }
+
+        throw ScheduleError{"schedule has wrong format: unable to find start of schedule"};
+    }
+
+    void Scheduler::_clear_attributes() {
+        _groups.clear();
+        _schedule_date_and_course_metainfo = "";
+        _confirmation_metainfo = "";
+        _UMD_head_metainfo.first = "";
+        _UMD_head_metainfo.second = "";
+        _headmaster_metainfo.first = "";
+        _headmaster_metainfo.second = "";
     }
 
     int Scheduler::_get_group_index(const string &group_name) const {
@@ -216,22 +264,24 @@ namespace scheduler {
     }
 
     void Scheduler::_parse_schedule_metainfo() {
-        _schedule_date_and_course_metainfo = _schedule.get_cell(0, 1);
-        _confirmation_metainfo = _schedule.get_cell(0, 13);
+        _schedule_date_and_course_metainfo = _schedule.get_cell(_schedule_start_row - 1, _schedule_start_col + 1);
+        _confirmation_metainfo = _schedule.get_cell(_schedule_start_row - 1, _schedule_start_col + 13);
 
-        _UMD_head_metainfo.first = _schedule.get_cell(75, 2);
-        _UMD_head_metainfo.second = _schedule.get_cell(75, 8);
+        _UMD_head_metainfo.first = _schedule.get_cell(_schedule_start_row + 74, _schedule_start_col + 2);
+        _UMD_head_metainfo.second = _schedule.get_cell(_schedule_start_row + 74, _schedule_start_col + 8);
 
-        _headmaster_metainfo.first = _schedule.get_cell(75, 11);
-        _headmaster_metainfo.second = _schedule.get_cell(75, 14);
+        _headmaster_metainfo.first = _schedule.get_cell(_schedule_start_row + 74, _schedule_start_col + 11);
+        _headmaster_metainfo.second = _schedule.get_cell(_schedule_start_row + 74, _schedule_start_col + 14);
     }
 
     void Scheduler::_parse_schedule() {
+        _fill_schedule_start_position();
+
         _parse_schedule_metainfo();
 
         schedule_index_t group_name_row = _get_group_name_row();
 
-        for (schedule_index_t column = 0; column < _schedule.get_max_column_index(); column++) {
+        for (schedule_index_t column = _schedule_start_col; column < _schedule.get_max_column_index(); column++) {
             if (GroupSchedule::is_group_name_valid(_schedule.get_cell(group_name_row, column))) {
                 GroupSchedule gs;
                 pair<schedule_index_t, schedule_index_t> group_position{group_name_row, column};
@@ -244,10 +294,11 @@ namespace scheduler {
     }
 
     void Scheduler::_load_schedule_metainfo_into_file() {
-        schedule_index_t upper_row = 0, lower_row = 75;
-        pair<schedule_index_t, schedule_index_t> upper_row_columns{1, 13};
-        pair<schedule_index_t, schedule_index_t> lower_UMD_columns{2, 8};
-        pair<schedule_index_t, schedule_index_t> lower_headmaster_columns{11, 14};
+        schedule_index_t upper_row = _schedule_start_row - 1, lower_row = _schedule_start_row + 74;
+        pair<schedule_index_t, schedule_index_t> upper_row_columns{_schedule_start_col + 1, _schedule_start_col + 13};
+        pair<schedule_index_t, schedule_index_t> lower_UMD_columns{_schedule_start_col + 2, _schedule_start_col + 8};
+        pair<schedule_index_t, schedule_index_t> lower_headmaster_columns{_schedule_start_col + 11,
+                                                                          _schedule_start_col + 14};
 
 
         for (uint8_t i = 0; i < _max_groups_count / 3; i++,
@@ -292,9 +343,9 @@ namespace scheduler {
     }
 
     void Scheduler::_load_groups_into_file() {
-        schedule_index_t group_row = 1;
-        schedule_index_t group_column = 5;
-        for (uint8_t i = 1; i <= _groups.size(); i++) {
+        schedule_index_t group_row = _schedule_start_row + 1;
+        schedule_index_t group_column = _schedule_start_col + 5;
+        for (uint64_t i = 1; i <= _groups.size(); i++) {
             GroupSchedule &gs = _groups.at(i - 1);
             _load_single_group_into_file(gs, group_row, group_column);
 
@@ -304,5 +355,13 @@ namespace scheduler {
                 group_column += 5;
             }
         }
+    }
+
+    vector<GroupSchedule> &Scheduler::get_groups_non_const_ref() const {
+        return const_cast<vector<GroupSchedule> &>(get_groups());
+    }
+
+    GroupSchedule &Scheduler::get_group_non_const_ref(const string &group_name) const {
+        return const_cast<GroupSchedule &>(get_group(group_name));
     }
 }

@@ -1,17 +1,8 @@
 #include "common.h"
 
 namespace scheduler {
-    XlsxFile::XlsxFile(const string &file_name) {
-        _file_name = file_name;
-
-        try {
-            _wb.load(_file_name);
-        } catch (xlnt::exception &) {
-            throw ScheduleError{"file '" + file_name + "' does not exist"};
-        }
-
-        _ws = _wb.active_sheet();
-        _load_xlsx_into_info();
+    XlsxFile::XlsxFile(const string &filename) {
+        load_new_file(filename);
     }
 
     XlsxFile::~XlsxFile() {
@@ -61,9 +52,27 @@ namespace scheduler {
     void XlsxFile::set_file_name(const string &new_filename) {
         _file_name = new_filename;
 
-        if (new_filename.find(".xlsx") != new_filename.size() - 5) {
+        if (new_filename.find(".xlsx") != new_filename.size() - 4) {
             _file_name += ".xlsx";
+
+            if (_file_name.substr(0, _file_name.size() - 4).empty()) {
+                throw ScheduleError{"file can not have empty name"};
+            }
         }
+    }
+
+    void XlsxFile::load_new_file(const string &filename) {
+        _file_name = filename;
+
+        try {
+            _wb.load(_file_name);
+        } catch (xlnt::exception &) {
+            throw ScheduleError{"file '" + filename + "' does not exist"};
+        }
+
+        _ws = _wb.active_sheet();
+        _xlsx_info.clear();
+        _load_xlsx_into_info();
     }
 
     void XlsxFile::write_as(const string &new_filename) {

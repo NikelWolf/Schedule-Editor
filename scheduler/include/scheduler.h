@@ -15,6 +15,10 @@ namespace scheduler {
 
         void set_schedule_filename(const string &filename);
 
+        void open_new_schedule(const string &filename);
+
+        void create_new_empty_schedule(const string &filename);
+
         const vector<GroupSchedule> &get_groups() const;
 
         const GroupSchedule &get_group(const string &group_name) const;
@@ -41,16 +45,23 @@ namespace scheduler {
 
         void save_schedule();
 
+        void save_schedule_as(const string &filename);
+
         string to_string() const;
 
         friend ostream &operator<<(ostream &os, const Scheduler &scheduler);
 
+        vector<GroupSchedule> &get_groups_non_const_ref() const;
+
+        GroupSchedule &get_group_non_const_ref(const string &group_name) const;
+
     private:
-        const static string _default_schedule_template_file;
+        const static string _default_schedule_template_filename;
         const static string _default_schedule_filename;
         const static uint8_t _max_groups_count;
 
         XlsxFile _schedule;
+        schedule_index_t _schedule_start_row, _schedule_start_col;
         vector<GroupSchedule> _groups{};
 
         string _schedule_date_and_course_metainfo;
@@ -59,6 +70,10 @@ namespace scheduler {
         pair<string, string> _headmaster_metainfo;
 
         schedule_index_t _get_group_name_row() const;
+
+        void _fill_schedule_start_position();
+
+        void _clear_attributes();
 
         int _get_group_index(const string &group_name) const;
 

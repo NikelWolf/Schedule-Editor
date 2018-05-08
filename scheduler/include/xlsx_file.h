@@ -10,7 +10,7 @@ namespace scheduler {
             bool __was_changed = false;
         };
 
-        explicit XlsxFile(const string &file_name);
+        explicit XlsxFile(const string &filename);
 
         virtual ~XlsxFile();
 
@@ -29,6 +29,8 @@ namespace scheduler {
         const string &get_file_name() const;
 
         void set_file_name(const string &new_filename);
+
+        void load_new_file(const string &filename);
 
         void write_as(const string &new_filename);
 

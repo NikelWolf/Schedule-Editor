@@ -35,6 +35,8 @@ namespace scheduler {
 
         friend ostream &operator<<(ostream &os, const GroupSchedule &gs);
 
+        Lesson &get_lesson_non_const_ref(int parity, int day, int lesson_number) const;
+
     private:
         const static regex _group_name_template;
         string _group_name;
