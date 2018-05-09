@@ -8,7 +8,7 @@ set(COMBINED_PROJECT TRUE)
 option(STATIC "Set to ON to build xlnt as a static library instead of a shared library" OFF)
 
 # Optional components
-option(TESTS "Set to OFF to skip building test executable (in ./tests)" ON)
+option(TESTS "Set to OFF to skip building test executable (in ./tests)" OFF)
 option(SAMPLES "Set to ON to build executable code samples (in ./samples)" OFF)
 option(BENCHMARKS "Set to ON to build performance benchmarks (in ./benchmarks)" OFF)
 option(PYTHON "Set to ON to build Arrow conversion functions (in ./python)" OFF)
