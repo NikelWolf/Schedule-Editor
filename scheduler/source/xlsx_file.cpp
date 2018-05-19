@@ -5,10 +5,16 @@ namespace scheduler {
         load_new_file(filename);
     }
 
+    XlsxFile::XlsxFile(const scheduler::XlsxFile &file) {
+        load_new_file(file._filename);
+    }
+
     XlsxFile::~XlsxFile() {
         if (_file_was_changed && _file_was_saved) {
             write();
         }
+
+        delete _document;
     }
 
     schedule_index_t XlsxFile::get_max_row_index() const {
@@ -46,31 +52,26 @@ namespace scheduler {
     }
 
     const string &XlsxFile::get_file_name() const {
-        return _file_name;
+        return _filename;
     }
 
     void XlsxFile::set_file_name(const string &new_filename) {
-        _file_name = new_filename;
+        _filename = new_filename;
 
         if (new_filename.find(".xlsx") != new_filename.size() - 4) {
-            _file_name += ".xlsx";
+            _filename += ".xlsx";
 
-            if (_file_name.substr(0, _file_name.size() - 4).empty()) {
+            if (_filename.substr(0, _filename.size() - 4).empty()) {
                 throw ScheduleError{"file can not have empty name"};
             }
         }
     }
 
     void XlsxFile::load_new_file(const string &filename) {
-        _file_name = filename;
+        _filename = filename;
 
-        try {
-            _wb.load(_file_name);
-        } catch (xlnt::exception &) {
-            throw ScheduleError{"file '" + filename + "' does not exist"};
-        }
+        _document = new Document(filename.c_str());
 
-        _ws = _wb.active_sheet();
         _xlsx_info.clear();
         _load_xlsx_into_info();
     }
@@ -84,12 +85,12 @@ namespace scheduler {
         for (schedule_index_t row = 1; row < _max_row + 1; row++) {
             for (schedule_index_t column = 1; column < _max_column + 1; column++) {
                 if (_xlsx_info[row - 1][column - 1].__was_changed) {
-                    _ws.cell(column, static_cast<row_t>(row)).value(_xlsx_info[row - 1][column - 1].value);
+                    _document->write(row, column, QString(_xlsx_info.at(row - 1).at(column - 1).value.c_str()));
                 }
             }
         }
 
-        _wb.save(_file_name);
+        _document->saveAs(QString(_filename.c_str()));
 
         _file_was_changed = false;
         _file_was_saved = true;
@@ -104,15 +105,16 @@ namespace scheduler {
     }
 
     void XlsxFile::_load_xlsx_into_info() {
-        _max_row = _ws.highest_row();
-        _max_column = _ws.highest_column().index;
+        _max_row = _document->dimension().lastRow();
+        _max_column = _document->dimension().lastColumn();
 
         for (schedule_index_t row = 1; row <= _max_row; row++) {
             vector<XlsxCell> row_info;
             for (schedule_index_t column = 1; column <= _max_column; column++) {
-                try {
-                    row_info.emplace_back(XlsxCell{_ws.cell(column, static_cast<row_t>(row)).to_string()});
-                } catch (out_of_range &) {
+                Cell *c = _document->cellAt(row, column);
+                if (c) {
+                    row_info.emplace_back(XlsxCell{c->value().toString().toStdString()});
+                } else {
                     row_info.emplace_back(XlsxCell{});
                 }
             }

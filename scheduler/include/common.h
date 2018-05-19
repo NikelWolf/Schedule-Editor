@@ -9,10 +9,10 @@
 #include <algorithm>
 #include <cstdint>
 
-#include <xlnt/xlnt.hpp>
+#include <xlsxdocument.h>
 
 using namespace std;
-using namespace xlnt;
+using namespace QXlsx;
 
 namespace scheduler {
     class Lesson;

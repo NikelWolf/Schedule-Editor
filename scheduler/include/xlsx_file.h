@@ -12,6 +12,8 @@ namespace scheduler {
 
         explicit XlsxFile(const string &filename);
 
+        XlsxFile(const XlsxFile &file);
+
         virtual ~XlsxFile();
 
         schedule_index_t get_max_row_index() const;
@@ -44,9 +46,8 @@ namespace scheduler {
         bool _file_was_changed = false;
         bool _file_was_saved = false;
 
-        string _file_name;
-        workbook _wb;
-        worksheet _ws;
+        string _filename;
+        Document *_document;
 
         vector<vector<XlsxCell>> _xlsx_info{};
 

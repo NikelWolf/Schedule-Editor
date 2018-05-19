@@ -16,8 +16,8 @@ set(SCHEDULER_RESOURCES_DIR ${SCHEDULER_ROOT_DIR}/resources)
 set(THIRD_PARTY_DIR ${SCHEDULER_ROOT_DIR}/third-party)
 
 # Include xlnt library
-add_subdirectory(${THIRD_PARTY_DIR}/xlnt
-        ${CMAKE_CURRENT_BINARY_DIR}/third-party/xlnt)
+add_subdirectory(${THIRD_PARTY_DIR}/QtXlsxWriter
+        ${CMAKE_CURRENT_BINARY_DIR}/third-party/QtXlsxWriter)
 
 # Non-target-specific compiler settings
 if (MSVC)
@@ -82,13 +82,13 @@ else ()
     # Compile static library
     add_library(${LIBRARY_NAME} STATIC ${SCHEDULER_HEADERS} ${SCHEDULER_SOURCES})
 
-    add_dependencies(${LIBRARY_NAME} xlnt)
+    add_dependencies(${LIBRARY_NAME} QtXlsxWriter)
 endif ()
 
 # Includes
 target_include_directories(${LIBRARY_NAME} PUBLIC ${SCHEDULER_INCLUDE_DIR})
-target_include_directories(${LIBRARY_NAME} PUBLIC ${THIRD_PARTY_DIR}/xlnt/include)
-target_link_libraries(${LIBRARY_NAME} xlnt)
+target_include_directories(${LIBRARY_NAME} PUBLIC ${THIRD_PARTY_DIR}/QtXlsxWriter/src/)
+target_link_libraries(${LIBRARY_NAME} QtXlsxWriter)
 
 # Platform- and file-specific settings, MSVC
 if (MSVC)
@@ -113,14 +113,14 @@ if (NOT STATIC)
 
     if (WIN32)
         set(shared_libs
-                ${CMAKE_CURRENT_BINARY_DIR}/third-party/xlnt/source/libxlnt${DEBUG_SYMBOL}.dll
+#                ${CMAKE_CURRENT_BINARY_DIR}/third-party/xlnt/source/libxlnt${DEBUG_SYMBOL}.dll
                 ${CMAKE_CURRENT_BINARY_DIR}/libscheduler${DEBUG_SYMBOL}.dll)
     elseif (UNIX AND NOT APPLE)
         set(XLNT_VERSION 1.2)
 
         set(shared_libs
-                ${CMAKE_CURRENT_BINARY_DIR}/third-party/xlnt/source/libxlnt${DEBUG_SYMBOL}.so.${XLNT_VERSION}
-                ${CMAKE_CURRENT_BINARY_DIR}/third-party/xlnt/source/libxlnt${DEBUG_SYMBOL}.so
+#                ${CMAKE_CURRENT_BINARY_DIR}/third-party/xlnt/source/libxlnt${DEBUG_SYMBOL}.so.${XLNT_VERSION}
+#                ${CMAKE_CURRENT_BINARY_DIR}/third-party/xlnt/source/libxlnt${DEBUG_SYMBOL}.so
                 ${CMAKE_CURRENT_BINARY_DIR}/libscheduler${DEBUG_SYMBOL}.so.${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
                 ${CMAKE_CURRENT_BINARY_DIR}/libscheduler${DEBUG_SYMBOL}.so)
     endif ()
