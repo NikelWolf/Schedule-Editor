@@ -7,8 +7,8 @@ set(COMBINED_PROJECT TRUE)
 # Library type
 option(STATIC "Set to ON to build scheduler as a static library instead of a shared library" OFF)
 
-if(TESTS)
-    add_subdirectory(tests)
-endif()
+#if(TESTS)
+#    add_subdirectory(tests)
+#endif()
 
 add_subdirectory(source)

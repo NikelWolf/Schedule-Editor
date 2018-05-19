@@ -2,6 +2,7 @@
 
 WSchedule::WSchedule(vector<GroupSchedule> &groupsVector_, QWidget *parent)
         : QWidget(parent), groupsVector(groupsVector_) {
+
     qDebug()<<"groups push start";
     for (auto &group : groupsVector) {
         wgroups.push_back(new WGroup(group, this));

@@ -10,7 +10,7 @@ Q_OBJECT
 private:
 
     WSchedule *wschedule;
-    Scheduler scheduler;
+    Scheduler& scheduler;
 
     QScrollArea *scroll;
 
@@ -18,7 +18,7 @@ private:
 
 public:
 
-explicit WMain(const Scheduler &scheduler, QWidget *parent = nullptr);
+ WMain(Scheduler &scheduler_, QWidget *parent = nullptr);
 
 signals:
 

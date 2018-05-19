@@ -13,7 +13,7 @@ private:
     void createWidgets();
 
 public:
-    explicit WSchedule(vector<GroupSchedule> &groupsVector, QWidget *parent);
+    explicit WSchedule(vector<GroupSchedule> &groupsVector_, QWidget *parent);
 
     void saveSchedule();
 

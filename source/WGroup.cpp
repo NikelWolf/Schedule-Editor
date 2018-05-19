@@ -1,14 +1,15 @@
 #include "WGroup.h"
 
-WGroup::WGroup(GroupSchedule &groupSchedule, QWidget *parent)
-        : QWidget(parent), groupScheduleRef(groupSchedule) {
+WGroup::WGroup(GroupSchedule &groupSchedule_, QWidget *parent)
+        : QWidget(parent), groupScheduleRef(groupSchedule_) {
+
     for (int day = 0; day < 6; ++day) {
         for (int lesNum = 0; lesNum < 6; ++lesNum) {
             WLesson *wLesson = new WLesson(lesNum + 1, lessonsTimeList[lesNum]);
             wlessons.push_back(wLesson);
 
             for (int parity = 0; parity < 2; ++parity) {
-                const Lesson &lesson = groupScheduleRef.get().get_lesson(parity + 1, day + 1, lesNum + 1);
+                const Lesson &lesson = groupScheduleRef.get_lesson(parity + 1, day + 1, lesNum + 1);
                 wLesson->setSubject(parity,
                                     QString::fromStdString(lesson.get_subject_name()));
                 wLesson->setType(parity,
@@ -23,12 +24,12 @@ WGroup::WGroup(GroupSchedule &groupSchedule, QWidget *parent)
     createWidgets();
 
     wlineEdits[0]->setText(
-            QString::fromStdString(groupScheduleRef.get().get_group_name())
+            QString::fromStdString(groupScheduleRef.get_group_name())
     );
     wlineEdits[1]->setText(
-            QString::fromStdString(groupScheduleRef.get().get_group_faculty())
+            QString::fromStdString(groupScheduleRef.get_group_faculty())
     );
-    wlineEdits[2]->setText(QString::fromStdString(groupScheduleRef.get().get_group_magic_number())
+    wlineEdits[2]->setText(QString::fromStdString(groupScheduleRef.get_group_magic_number())
     );
 
 }
@@ -92,33 +93,41 @@ void WGroup::createWidgets() {
     }
 }
 
-void WGroup::saveGroup() { //todo save groupScheduleRef
+void WGroup::saveGroup() {
     string str = wlineEdits[0]->text().toStdString();
-    groupScheduleRef.get().set_group_name(str);
+    groupScheduleRef.set_group_name(str);
 
     str = wlineEdits[1]->text().toStdString();
-    groupScheduleRef.get().set_group_faculty(str);
+    groupScheduleRef.set_group_faculty(str);
 
     str = wlineEdits[2]->text().toStdString();
-    groupScheduleRef.get().set_group_magic_number(str);
+    groupScheduleRef.set_group_magic_number(str);
 
-    for (int k = 0; k < 36; ++k) {
-        for (int parity = 0; parity < 2; ++parity) {
-            //todo indexs
-            Lesson &lesson = const_cast<Lesson &>(groupScheduleRef.get().get_lesson(parity, k / 6, k % 6));
-            lesson.set_subject_name(
-                    wlessons[k]->getSubject(parity).toStdString()
-            );
-            lesson.set_lesson_type(
-                    wlessons[k]->getType(parity).toStdString()
-            );
-            lesson.set_professor(
-                    wlessons[k]->getProffesor(parity).toStdString()
-            );
-            lesson.set_room(
-                    wlessons[k]->getRoom(parity).toStdString()
-            );
-            groupScheduleRef.get().set_lesson(parity, k % 6, 1, lesson);
+    int k=0;
+    for (int day = 1; day < 7; ++day) {
+        for (int lesNum = 1; lesNum < 7; ++lesNum, ++k) {
+            for (int parity = 0; parity < 2; ++parity) {
+
+                auto &lesson = groupScheduleRef.get_lesson_non_const_ref(parity+1, day, lesNum);
+
+                lesson.set_subject_name(
+                        wlessons[k]->getSubject(parity).toStdString()
+                );
+
+                lesson.set_lesson_type(
+                        wlessons[k]->getType(parity).toStdString()
+                );
+
+                lesson.set_professor(
+                        wlessons[k]->getProffesor(parity).toStdString()
+                );
+
+                lesson.set_room(
+                        wlessons[k]->getRoom(parity).toStdString()
+                );
+
+                groupScheduleRef.set_lesson(parity+1, day, lesNum, lesson);
+            }
         }
     }
 }

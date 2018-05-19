@@ -62,13 +62,13 @@ private:
     array<QLineEdit *, 3> wlineEdits;
     vector<WLesson *> wlessons;
 
-    reference_wrapper<GroupSchedule> groupScheduleRef;
+    GroupSchedule &groupScheduleRef;
 
 private:
     void createWidgets();
 
 public:
-    WGroup(GroupSchedule &groupSchedule, QWidget *parent);
+    WGroup(GroupSchedule &groupSchedule_, QWidget *parent);
 
     void saveGroup();
 

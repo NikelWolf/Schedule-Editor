@@ -1,9 +1,8 @@
 #include "WMain.h"
 
-WMain::WMain(const Scheduler &scheduler, QWidget *parent) : QMainWindow(parent) {
+WMain::WMain(Scheduler &scheduler_, QWidget *parent) : QMainWindow(parent), scheduler(scheduler_) {
     this->scheduler = scheduler;
-    wschedule = new WSchedule(const_cast<vector<GroupSchedule> &>(scheduler.get_groups()), this);
-
+    wschedule = new WSchedule(scheduler.get_groups_non_const_ref(), this);
 
     createWidgets();
 }
@@ -29,7 +28,7 @@ void WMain::createWidgets() {
 
 void WMain::openFile() {
     Scheduler scheduler("resources/schedule_template.xlsx");
-    wschedule = new WSchedule(const_cast<vector<GroupSchedule> &>(scheduler.get_groups()), this);
+    wschedule = new WSchedule(scheduler.get_groups_non_const_ref(), this);
     scroll->setWidget(wschedule);
     scroll->update();
     qDebug() << "opened";
@@ -37,7 +36,6 @@ void WMain::openFile() {
 
 void WMain::saveFile() { //todo
     wschedule->saveSchedule();
-    cout<< "тест1: "<< scheduler.get_group("ИАБО-01-17").get_group_faculty();
+    cout << scheduler;
     scheduler.save_schedule();
-    cout<< "тест2: "<< scheduler.get_group("ИАБО-01-17").get_group_faculty();
 };

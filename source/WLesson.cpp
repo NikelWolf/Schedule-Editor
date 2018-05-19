@@ -93,19 +93,22 @@ void WLesson::setRoom(int parity, QString name) {
     textEdits[6 + parity]->setText(name);
 }
 
-QString WLesson::getType(int parity) {
+QString WLesson::getSubject(int parity) {
     return textEdits[parity]->toPlainText();
+
+}
+
+QString WLesson::getType(int parity) {
+    return textEdits[2+ parity]->toPlainText();
 }
 
 QString WLesson::getProffesor(int parity) {
-    return textEdits[2 + parity]->toPlainText();
-}
-
-QString WLesson::getRoom(int parity) {
     return textEdits[4 + parity]->toPlainText();
 }
 
-QString WLesson::getSubject(int parity) {
+QString WLesson::getRoom(int parity) {
     return textEdits[6 + parity]->toPlainText();
-
 }
+
+
+
