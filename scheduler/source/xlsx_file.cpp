@@ -56,15 +56,11 @@ namespace scheduler {
     }
 
     void XlsxFile::set_file_name(const string &new_filename) {
-        _filename = new_filename;
-
-        if (new_filename.find(".xlsx") != new_filename.size() - 4) {
-            _filename += ".xlsx";
-
-            if (_filename.substr(0, _filename.size() - 4).empty()) {
-                throw ScheduleError{"file can not have empty name"};
-            }
+        if (new_filename.empty()) {
+            throw ScheduleError{"file can not have empty name"};
         }
+
+        _filename = new_filename;
     }
 
     void XlsxFile::load_new_file(const string &filename) {
