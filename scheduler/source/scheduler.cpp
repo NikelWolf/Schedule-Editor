@@ -343,7 +343,7 @@ namespace scheduler {
     }
 
     void Scheduler::_load_groups_into_file() {
-        schedule_index_t group_row = _schedule_start_row + 1;
+        schedule_index_t group_row = _schedule_start_row;
         schedule_index_t group_column = _schedule_start_col + 5;
         for (uint64_t i = 1; i <= _groups.size(); i++) {
             GroupSchedule &gs = _groups.at(i - 1);
