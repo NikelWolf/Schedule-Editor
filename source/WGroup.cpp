@@ -14,7 +14,7 @@ WGroup::WGroup(GroupSchedule &groupSchedule_, QWidget *parent)
                                     QString::fromStdString(lesson.get_subject_name()));
                 wLesson->setType(parity,
                                  QString::fromStdString(lesson.get_lesson_type()));
-                wLesson->setProffesor(parity,
+                wLesson->setProfessor(parity,
                                       QString::fromStdString(lesson.get_professor()));
                 wLesson->setRoom(parity,
                                  QString::fromStdString(lesson.get_room()));
@@ -119,7 +119,7 @@ void WGroup::saveGroup() {
                 );
 
                 lesson.set_professor(
-                        wlessons[k]->getProffesor(parity).toStdString()
+                        wlessons[k]->getProfessor(parity).toStdString()
                 );
 
                 lesson.set_room(
@@ -130,4 +130,66 @@ void WGroup::saveGroup() {
             }
         }
     }
+}
+
+
+bool WGroup::insertGroupToDb(){
+    int k=0;
+    for (int day = 0; day < 6; ++day) {
+        for (int lesNum = 1; lesNum < 7; ++lesNum, ++k) {
+            for (int p = 0; p < 2; ++p) {
+
+                bool empty = false;
+                for(int c=0; c < 4; ++c){  //ouch...
+                    //empty = wlessons[k]->textEdits[c]->placeholderText().isEmpty();
+                    empty = wlessons[k]->textEdits[c]->toPlainText().isEmpty();
+                    if(empty) {
+                        qDebug("empty");
+                        break;
+                    }
+                    qDebug("NOT empty");
+
+                }
+                if(empty){
+                    continue;
+                }
+
+                if(!insertLessonToDb(week[day], lesNum, p, wlessons[k])) {
+                    QString type = wlessons[k]->textEdits[2 + p]->toPlainText();
+                    if (type == "лк" || type == "лаб") {
+                        wlessons[k]->textEdits[4 + p]->setStyleSheet("background-color: white");
+                        wlessons[k]->textEdits[6 + p]->setStyleSheet("background-color: white");
+                        continue;
+                    }
+                    wlessons[k]->textEdits[4 + p]->setStyleSheet("background-color: red");
+                    wlessons[k]->textEdits[6 + p]->setStyleSheet("background-color: red");
+
+                    qDebug() << "ALARM";
+                    qDebug() << wlessons[k]->textEdits[4 + p]->toPlainText();
+                    qDebug() <<  wlessons[k]->textEdits[6 + p]->toPlainText();
+                    return false;
+                }
+                wlessons[k]->textEdits[4 + p]->setStyleSheet("background-color: white");
+                wlessons[k]->textEdits[6 + p]->setStyleSheet("background-color: white");
+            }
+        }
+    }
+    return true;
+}
+
+bool WGroup::insertLessonToDb(QString &day, int lesson, int parity, WLesson *wLesson) {
+
+    QSqlQuery query;
+
+    query.prepare("INSERT INTO schedule  (day, lesson, parity, professor, cabinet) "
+                  "VALUES (:day, :lesson, :parity, :professor, :cabinet);");
+
+    query.bindValue(":day", day);
+    query.bindValue(":lesson", QString(lesson));
+    query.bindValue(":parity", QString(parity));
+    query.bindValue(":professor", wLesson->getProfessor(parity));
+    query.bindValue(":cabinet", wLesson->getRoom(parity));
+
+    return query.exec();
+
 }

@@ -84,7 +84,7 @@ void WLesson::setType(int parity, QString name) {
 
 }
 
-void WLesson::setProffesor(int parity, QString name) {
+void WLesson::setProfessor(int parity, QString name) {
     textEdits[4 + parity]->setText(name);
 
 }
@@ -102,7 +102,7 @@ QString WLesson::getType(int parity) {
     return textEdits[2+ parity]->toPlainText();
 }
 
-QString WLesson::getProffesor(int parity) {
+QString WLesson::getProfessor(int parity) {
     return textEdits[4 + parity]->toPlainText();
 }
 

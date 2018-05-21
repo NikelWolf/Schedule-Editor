@@ -22,9 +22,6 @@ class WLesson : public QWidget {
 Q_OBJECT
 private:
     array<QLabel *, 5> labels;
-    array<QTextEdit *, 8> textEdits;
-    //0 2 4 6
-    //1 3 5 7
 
     QGridLayout *labelsLayout;
     QGridLayout *textLayout;
@@ -32,6 +29,9 @@ private:
     void createWidgets(int lessonNumber, QStringList &time);
 
 public:
+    array<QTextEdit *, 8> textEdits;
+    //0 2 4 6
+    //1 3 5 7
 
     WLesson(int lessonNumber, QStringList &time, QWidget *parent = nullptr);
 
@@ -41,7 +41,7 @@ public:
 
     void setType(int parity, QString name);
 
-    void setProffesor(int parity, QString name);
+    void setProfessor(int parity, QString name);
 
     void setRoom(int parity, QString name);
 
@@ -49,7 +49,7 @@ public:
 
     QString getType(int parity);
 
-    QString getProffesor(int parity);
+    QString getProfessor(int parity);
 
     QString getRoom(int parity);
 

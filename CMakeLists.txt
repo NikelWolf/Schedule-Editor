@@ -10,6 +10,7 @@ find_package(Qt5Gui REQUIRED)
 find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Sql REQUIRED)
 
+
 #build and link scheduler and xlnt as static libraries
 set(STATIC ON CACHE BOOL "Set to ON to build scheduler as a shared library instead of a static library" FORCE)
 add_subdirectory(scheduler)

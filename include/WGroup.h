@@ -2,6 +2,7 @@
 #define WGROUP_H
 
 #include <WLesson.h>
+#include <QtSql>
 
 
 static const QSize hedSize[] = { //todo wgroup size
@@ -26,11 +27,11 @@ Q_OBJECT
 private:
 
     QStringList headerLabels = {
-            {"День недели"},
+            {"Неделя"},
             {"Группа"},
             {"№ пары"},
-            {"Нач. занятий"},
-            {"Кон. занятий"},
+            {"Нач."},
+            {"Кон."},
             {"Неделя"},
             {"Предмет"},
             {"Вид занятий"},
@@ -68,9 +69,14 @@ private:
     void createWidgets();
 
 public:
+
     WGroup(GroupSchedule &groupSchedule_, QWidget *parent);
 
     void saveGroup();
+
+    bool insertGroupToDb();
+
+    bool insertLessonToDb(QString &day, int lesson, int parity, WLesson *wLesson);
 
 };
 

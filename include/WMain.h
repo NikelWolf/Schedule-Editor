@@ -26,6 +26,8 @@ public slots:
 
     void openFile();
     void saveFile();
+    void saveAsFile();
+    void checkSchedule();
 
 };
 

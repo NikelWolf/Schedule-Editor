@@ -5,9 +5,10 @@ int main(int argc, char *argv[]) {
 
     QApplication app(argc, argv);
 
-    Scheduler scheduler("resources/schedule_template.xlsx");
+    Scheduler scheduler;
 
     WMain wMain(scheduler);
+    wMain.openFile();
     wMain.show();
 
     return QApplication::exec();

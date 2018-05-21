@@ -17,6 +17,8 @@ public:
 
     void saveSchedule();
 
+    void insertScheduleToDb();
+
 signals:
 
 public slots:
